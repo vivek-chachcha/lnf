@@ -1,0 +1,54 @@
+body, head {
+    text-align: center;
+}
+#listview:hover,#mapview:hover {
+	background-color: #AAA;
+}
+#changeview {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+#posttablelist,#posttablemap {
+    margin: 0 auto;
+}
+#map {
+    width: 800px;
+    height: 600px;
+    display: inline-block;
+    margin-right: 25px;
+}
+#listtable {
+    text-align: left;
+    width: 350px;
+    height: 570px;
+    background-color: #CCC;
+    display: inline-block;
+    padding-top: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    overflow-y: scroll;
+}
+#list {
+    text-align: left;
+    width: 1175px;
+    height: 570px;
+    background-color: #CCC;
+    display: inline-block;
+    padding-top: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    overflow-y: scroll;
+}
+.row {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.row:hover{
+    background-color: #AAA;
+}
