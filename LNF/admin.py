@@ -1,3 +1,4 @@
 from django.contrib import admin
+from LNF.models import LNF_User
 
-# Register your models here.
+admin.site.register(LNF_User)
