@@ -11,7 +11,7 @@ class LNF_User(models.Model):
 	    return self.user.get_username()
 
 """"class SavedPost
-    user = models.OneToManyField(User)"""
+    user = models.OneToManyField(LNF_User)"""
 
 
 		
