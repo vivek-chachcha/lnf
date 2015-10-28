@@ -1,0 +1,38 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'basestyle.css' %}" />
+    <title>{% block title %}Animal Lost 'N Found{% endblock %}</title>
+</head>
+
+<body>
+	<div id="fullbody">
+    <div id="sidebar">
+		<center><b>NAVIGATION</b><br><br>
+        <a href="/">Home</a><br>
+        <a href="/about/">About</a><br><hr>
+        <a href="/lostposts/">Lost Pets</a><br>
+        <a href="/foundposts/">Found Pets</a><br><hr>
+        {% block sidebar %}
+        <a href="/signup/">Sign Up</a><br>
+        <a href="/login/">Login</a><br>
+        {% endblock %}
+		</center>
+    </div>
+	<div id="rcol">
+	<div id="header">
+        <h1>
+        {% block header %}
+		Animal Lost 'N Found
+        {% endblock %}
+		</h1>
+    </div>
+
+    <div id="content">
+        {% block content %}  {% endblock %}
+    </div>
+	</div>
+	</div>
+</body>
+</html>
