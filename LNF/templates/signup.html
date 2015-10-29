@@ -4,7 +4,9 @@
 {% csrf_token %}
 {% if form.errors %}<p>Please correct the following fields:</p>{% endif %}
 
-<div class="signup_div">
+<p><font size="5"; color=#ADD8E6><b>Sign up with Vancouver Animal Lost 'N Found!</b></font></p>
+<div style="border-radius: 30px 30px 30px 30px; background-color:fbf5d5; color:#303030; padding:20px;">
+<div class="signup_div"> 
         {% if form.firstname.errors %}<p class="error">{{ form.firstname.errors }}</p>{% endif %}
         <p><label for="firstname"{% if form.firstname.errors %} class="error"{% endif %}>First name:</label></p>
         <p>{{ form.firstname }}</p>
@@ -39,8 +41,9 @@
 <p>- I will not use the website for improper purposes.</p>
 <div class="signup_div">
         {% if form.user_agreement.errors %}<p class="error">{{ form.user_agreement.errors }}</p>{% endif %}
-        <p><label for="user_agreement"{% if form.user_agreement.errors %} class="error"{% endif %}><b>I agree to the above statements:<b></label></p>
+        <p><label for="user_agreement"{% if form.user_agreement.errors %} class="error"{% endif %}><b>I agree to the above statements:</b></label></p>
         <p>{{ form.user_agreement }}</p>
+</div>
 </div>
 
 <p><input type="submit" alt="signup" /></p>

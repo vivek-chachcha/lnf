@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-        <p>Name: {{ lnf_user.get_full_name }}</p>
-        <p>SavedPost: {{ lnf_user.savedPost }}</p>
-        <p>MyPost: {{ lnf_user.myPost }}</p>
+        <p><font size="5"; color=#ADD8E6><b>User Profile:</b></font></p>
+		<div style="border-radius: 30px 30px 30px 30px; background-color:fbf5d5; color:#303030; padding:20px;">
+        <p><b>Name:</b> {{ lnf_user.get_full_name }}</p>
+        <p><b>SavedPost:</b> {{ lnf_user.savedPost }}</p>
+        <p><b>MyPost:</b> {{ lnf_user.myPost }}</p>
+		</div>
 {% endblock %}
