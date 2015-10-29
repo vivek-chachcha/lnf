@@ -3,6 +3,7 @@
 <form action="" method="post">
 {% csrf_token %}
 {% if form.errors %}<p>Please correct the following fields:</p>{% endif %}
+<p><a href="/signup/">Sign Up</a></p>
 <div class="login_div">
         {% if form.username.errors %}<p class="error">{{ form.username.errors }}</p>{% endif %}
         <p><label for="username"{% if form.username.errors %} class="error"{% endif %}>Username:</label></p>
@@ -13,7 +14,7 @@
         <p><label for="password"{% if form.password.errors %} class="error"{% endif %}>Password:</label></p>
         <p>{{ form.password }}</p>
 </div>
-<p><input type="submit" alt="sign up" /></p>
+<p><input type="submit" alt="signup" /></p>
 </form>
 
 {% endblock %}

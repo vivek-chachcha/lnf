@@ -34,11 +34,15 @@
         <p><label for="password2"{% if form.password2.errors %} class="error"{% endif %}>Verify Password:</label></p>
         <p>{{ form.password2 }}</p>
 </div>
+<p>- I am an animal lover.</p>
+<p>- I will respect other users.</p>
+<p>- I will not use the website for improper purposes.</p>
 <div class="signup_div">
         {% if form.user_agreement.errors %}<p class="error">{{ form.user_agreement.errors }}</p>{% endif %}
-        <p><label for="user_agreement"{% if form.user_agreement.errors %} class="error"{% endif %}>User Agreement:</label></p>
+        <p><label for="user_agreement"{% if form.user_agreement.errors %} class="error"{% endif %}><b>I agree to the above statements:<b></label></p>
         <p>{{ form.user_agreement }}</p>
 </div>
+
 <p><input type="submit" alt="signup" /></p>
 </form>
 {% endblock %}

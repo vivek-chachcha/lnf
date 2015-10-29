@@ -40,7 +40,7 @@ def LoginRequest(request):
         else:
                 return render_to_response('login.html', {'form': form}, context_instance=RequestContext(request))
     else:
-        ''' user is not logged in, show login form'''
+        """ user is not logged in, show login form"""
         form = LoginForm()
         context = {'form': form}
         return render_to_response('login.html', context, context_instance=RequestContext(request))
