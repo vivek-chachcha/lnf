@@ -4,10 +4,15 @@
 {% csrf_token %}
 {% if form.errors %}<p>Please correct the following fields:</p>{% endif %}
 
-<div class="register_div">
-        {% if form.name.errors %}<p class="error">{{ form.name.errors }}</p>{% endif %}
-        <p><label for="name"{% if form.name.errors %} class="error"{% endif %}>Name:</label></p>
-        <p>{{ form.name }}</p>
+<div class="signup_div">
+        {% if form.firstname.errors %}<p class="error">{{ form.firstname.errors }}</p>{% endif %}
+        <p><label for="firstname"{% if form.firstname.errors %} class="error"{% endif %}>First name:</label></p>
+        <p>{{ form.firstname }}</p>
+</div>
+<div class="signup_div">
+        {% if form.lastname.errors %}<p class="error">{{ form.lastname.errors }}</p>{% endif %}
+        <p><label for="lastname"{% if form.lastname.errors %} class="error"{% endif %}>Last name:</label></p>
+        <p>{{ form.lastname }}</p>
 </div>
 <div class="signup_div">
         {% if form.username.errors %}<p class="error">{{ form.username.errors }}</p>{% endif %}
@@ -20,14 +25,14 @@
         <p>{{ form.email }}</p>
 </div>
 <div class="signup_div">
-        {% if form.password.errors %}<p class="error">{{ form.password.errors }}</p>{% endif %}
-        <p><label for="password"{% if form.password.errors %} class="error"{% endif %}>Password:</label></p>
-        <p>{{ form.password }}</p>
+        {% if form.password1.errors %}<p class="error">{{ form.password1.errors }}</p>{% endif %}
+        <p><label for="password1"{% if form.password1.errors %} class="error"{% endif %}>Password:</label></p>
+        <p>{{ form.password1 }}</p>
 </div>
 <div class="signup_div">
-        {% if form.password1.errors %}<p class="error">{{ form.password_verify.errors }}</p>{% endif %}
-        <p><label for="password_verify"{% if form.password_verify.errors %} class="error"{% endif %}>Verify Password:</label></p>
-        <p>{{ form.password_verify }}</p>
+        {% if form.password2.errors %}<p class="error">{{ form.password2.errors }}</p>{% endif %}
+        <p><label for="password2"{% if form.password2.errors %} class="error"{% endif %}>Verify Password:</label></p>
+        <p>{{ form.password2 }}</p>
 </div>
 <div class="signup_div">
         {% if form.user_agreement.errors %}<p class="error">{{ form.user_agreement.errors }}</p>{% endif %}

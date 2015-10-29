@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-        <p>Name: {{ lnf_user.name }}</p>
+        <p>Name: {{ lnf_user.get_full_name }}</p>
         <p>SavedPost: {{ lnf_user.savedPost }}</p>
         <p>MyPost: {{ lnf_user.myPost }}</p>
 {% endblock %}

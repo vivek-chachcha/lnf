@@ -1,19 +1,27 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.forms import ModelForm
-from LNF.models import LNF_User
+from django.contrib.auth.forms import UserCreationForm
 
-class SignUpForm(ModelForm):
-    username  = forms.CharField(label=(u'Username'))
-    email     = forms.EmailField(label=(u'Email Address')) #EmailField will check if the input email is a valid one
-    password  = forms.CharField(label=(u'Password'), widget=forms.PasswordInput(render_value=False)) #hash password
-    password_verify = forms.CharField(label=(u'Verify Password'), widget=forms.PasswordInput(render_value=False))
-    user_agreement = forms.BooleanField()
+class UserCreateForm(UserCreationForm):
+    firstname = forms.CharField(label=(u'First Name'), required=True)
+    lastname  = forms.CharField(label=(u'Last Name'), required=True)
+    email     = forms.EmailField(label=(u'Email Address'), required=True) #EmailField will check if the input email is a valid one
+    user_agreement = forms.BooleanField(required=True)
 
     class Meta:
-        model = LNF_User
-        exclude = ('user',)
+        model = User
+        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2')  
 
+    def save(self, commit=True):
+        user = super(UserCreateForm, self).save(commit=False)
+        user.email = self.cleaned_data["email"]
+        user.first_name = self.cleaned_data["firstname"]
+        user.last_name = self.cleaned_data["lastname"]
+        if commit:
+            user.save()
+        return user
+
+    """
     def clean_username(self):
         username = self.cleaned_data['username']
         try:
@@ -24,8 +32,9 @@ class SignUpForm(ModelForm):
 
     def clean(self):
         if self.cleaned_data['password'] != self.cleaned_data['password_verify']:
-            raise forms.ValidationError("Password verification failed. Please try again.") #raise an error if passwords did not match
+            raise forms.ValidationError("Passwords do not match. Please try again.") #raise an error if passwords did not match
         return self.cleaned_data
+    """
 
 class LoginForm(forms.Form):
     username        = forms.CharField(label=(u'Username'))

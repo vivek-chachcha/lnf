@@ -1,5 +1,4 @@
-"""Null URL Configuration
-
+"""
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/dev/topics/http/urls/
 Examples:
@@ -21,6 +20,6 @@ from . import views
 urlpatterns = [
     url(r'^signup/$', views.UserSignUp, name= 'SignUp'),
     url(r'^profile/$', views.Profile, name= 'Profile'),
-	url(r'^login/$', views.LoginRequest, name= 'Login'),
-	url(r'^logout/$', views.LogoutRequest, name= 'Logout'),
+    url(r'^login/$', views.LoginRequest, name= 'Login'),
+    url(r'^logout/$', views.LogoutRequest, name= 'Logout'),
 ]
