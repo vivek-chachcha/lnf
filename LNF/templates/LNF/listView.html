@@ -1,0 +1,15 @@
+{% if all_post_list %}
+    <ul style="list-style:none">
+    {% for post in all_post_list %}
+        <li>
+        <!--- <img src="{{post.pet_picture}}"> --->
+        <p> State: {{post.get_status_display}} <a href="/lnf/{{ post.id }}/post">details</a>
+        <p> Date: {{ post.date_created}}
+        <p> Description: {{ post.description }} 
+
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No posts are available.</p>
+{% endif %}
