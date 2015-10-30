@@ -18,15 +18,15 @@ class Post(models.Model):
     modified_date = models.DateTimeField('date last modified')
 
     PET_SEX_CHOICES = (
-    ('M', 'male'),
-    ('F', 'female'),
+    ('M', 'Male'),
+    ('F', 'Female'),
     )
     sex = models.CharField(max_length=1, choices=PET_SEX_CHOICES, default='M')
 
-    picture = models.ImageField(upload_to='posts')
+    picture = models.ImageField(upload_to='posts', default=url('posts/chinesecrested.jpg'))
     PET_STATE_CHOICES = (
-    ('0', 'lost'),
-    ('1', 'found'),
+    ('0', 'Lost'),
+    ('1', 'Found'),
     )
     state = models.CharField(max_length=1, choices=PET_STATE_CHOICES, default='0')
 

@@ -1,15 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>Posts</title>
+    <style>
+ul li {
+    background-color: #DDDDDD;
+    padding-top: 5px;
+    padding-bottom: 0px;     
+    padding-left: 5px;   
+    padding-right: 5px;     
+    
+}
+</style>
+  </head>
+  <body>  
+
 {% if all_post_list %}
+
     <ul style="list-style:none">
     {% for post in all_post_list %}
         <li>
         <!--- <img src="{{post.pet_picture}}"> --->
-        <p> State: {{post.get_status_display}} <a href="/lnf/{{ post.id }}/post">details</a>
-        <p> Date: {{ post.date_created}}
-        <p> Description: {{ post.description }} 
-
+        <img src="{{post.picture.url}}" height="50" width="50"> 
+        <p> Name: {{ post.name}} 
+        <p> State: {{post.get_state_display}}
+        <p> Date & Time {{post.get_state_display}}: {{ post.date}}
+        <p> Breed: {{ post.breed}}
+        <p> Colour: {{ post.colour}}
+        <p> Sex: {{ post.get_sex_display}}
+        <p> <a href="/lnf/{{ post.id }}/post">details</a>
         </li>
     {% endfor %}
     </ul>
 {% else %}
     <p>No posts are available.</p>
 {% endif %}
+
+  </body>
+</html>

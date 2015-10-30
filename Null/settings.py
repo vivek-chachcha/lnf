@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# ROOT FOR ALL MEDIA
+MEDIA_ROOT = "LNF/static/LNF/images/"
+MEDIA_URL = "/static/LNF/images/"
 
 # Application definition
 
@@ -37,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	'LNF',
 ]
 
 MIDDLEWARE_CLASSES = [
