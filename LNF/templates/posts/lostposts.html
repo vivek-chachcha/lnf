@@ -1,10 +1,10 @@
 {% load staticfiles %}
 
-<link rel="stylesheet" type="text/css" href="{%static 'posts/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{%static 'posts/poststyle.css' %}" />
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Posts</title>
+		<title>Lost Posts</title>
 		<script src="https://maps.googleapis.com/maps/api/js"></script>
 		<script>
 			var map;
@@ -20,8 +20,7 @@
 
 				map = new google.maps.Map(mapCanvas, mapOptions)
 
-				"{% for post in post_list %}"
-				"{% ifequal post.state 'Lost' %}"
+				"{% for post in lost_post_list %}"
 					var infowindow = new google.maps.InfoWindow({
 						content : "<b>Name: </b>" + "{{ post.name }}" + "<br><b>Color: </b>" + "{{ post.color }}" + "<br><b>Breed: </b>" + "{{ post.breed }}" + "<br><b>Sex: </b>" + "{{ post.sex }}" + "<br><br>View Post",
 					});
@@ -37,7 +36,6 @@
 						map.setZoom(14);
 						map.setCenter(this.getPosition());
 					});
-				"{% endifequal %}"
 				"{% endfor %}"
 			}
 			google.maps.event.addDomListener(window, 'load', initialize);
@@ -67,31 +65,29 @@
 	<div id="changeview"><span id="listview" onclick="swapview('listview')">LIST VIEW</span> | <span id="mapview" onclick="swapview('mapview')">MAP VIEW</span></div>
 	<div id="posttablelist" style="display:block">
 		<div id="list">
-			{% for post in post_list %}
+			{% for post in lost_post_list %}
 			<div class="row">
 				<div class="entry"><b>Name:</b> {{ post.name }}</div>
 				<div class="entry"><b>Color:</b> {{ post.color }}</div>
 				<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
 				<div class="entry"><b>Sex:</b>  {{ post.sex }}</div>
-			</div>
+			</div><br>
 			{% endfor %}
 		</div>
 	</div>
 	<div id="posttablemap" style="display:none">
 		<div id="map"></div>
 		<div id="listtable">
-			<center>All Animals With Locations</center>
+			<center><h3>All Animals With Locations</h3></center>
 			<p>
-			{% for post in post_list %}
+			{% for post in lost_post_list %}
 				{% ifnotequal post.lat None %}
-				{% ifequal post.state 'Lost' %}
 					<div class="row" onclick="focusOnMap({{post.id}})">
 						<div class="entry"><b>Name:</b> {{ post.name }}</div>
 						<div class="entry"><b>Color:</b> {{ post.color }}</div>
 						<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
 						<div class="entry"><b>Sex:</b>  {{ post.sex }}</div>
-					</div>
-				{% endifequal %}
+					</div><br>
 				{% endifnotequal %}
 			{% endfor %}
 		</div>
