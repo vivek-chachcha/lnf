@@ -2,13 +2,13 @@
 <h3>{{ post.date_created }}</h3>
 <style>
 </style>
-        {{post.picture.url}}
+        <img src="{{post.image_url}}" height="200" width="200">
         <p> Name: {{ post.name}} 
         <p> State: {{post.get_state_display}}
         <p> Date & Time {{post.get_state_display}}: {{ post.date}}
         <p> Breed: {{ post.breed}}
         <p> Colour: {{ post.colour}}
         <p> Sex: {{ post.get_sex_display}}
-        <p> Description: {{ post.description }} 
+        <p> Description: {{ post.description_text }} 
         <p>
 COMMENT SECTION

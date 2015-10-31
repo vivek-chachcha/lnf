@@ -10,12 +10,12 @@ import json
 import urllib.parse
 import urllib.request
 
-def allPosts(request):
+def posts(request):
     all_post_list = Post.objects.order_by('-date_created')[:]
     context = {'all_post_list': all_post_list}
     return render(request, 'lnf/listView.html', context)
     
-def createPost(request):
+def createpost(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -40,7 +40,7 @@ def createPost(request):
                 # DO ERROR HANDLING
                 return HttpResponseRedirect('error')      
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('allPosts'))
+            return HttpResponseRedirect(reverse('posts'))
 
     # if a GET (or any other method) we'll create a blank form
     else:

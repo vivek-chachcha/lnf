@@ -3,14 +3,6 @@
   <head>
 	<title>Posts</title>
     <style>
-ul li {
-    background-color: #DDDDDD;
-    padding-top: 5px;
-    padding-bottom: 0px;     
-    padding-left: 5px;   
-    padding-right: 5px;     
-    
-}
 </style>
   </head>
   <body>  
@@ -20,8 +12,8 @@ ul li {
     <ul style="list-style:none">
     {% for post in all_post_list %}
         <li>
-        <!--- <img src="{{post.pet_picture}}"> --->
-        <img src="{{post.picture.url}}" height="50" width="50"> 
+        <hr>
+        <img src="{{post.image_url}}" height="50" width="50">
         <p> Name: {{ post.name}} 
         <p> State: {{post.get_state_display}}
         <p> Date & Time {{post.get_state_display}}: {{ post.date}}
@@ -29,6 +21,7 @@ ul li {
         <p> Colour: {{ post.colour}}
         <p> Sex: {{ post.get_sex_display}}
         <p> <a href="/lnf/{{ post.id }}/post">details</a>
+        <hr>
         </li>
     {% endfor %}
     </ul>
