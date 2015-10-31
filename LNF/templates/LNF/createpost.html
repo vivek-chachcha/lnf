@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <style>
+ label { display: inline-block; width: 140px; text-align: right; }​
+
+</style>
   </head>
   <body>  
   <form enctype="multipart/form-data" action="" method="post">
   {% csrf_token %}
-    {{ form }}
+    {{ form.as_p }}
     <label for="address">Address: </label>
     <input id="address" name="address" type="text">
 	<input type="submit" value="OK">

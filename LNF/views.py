@@ -51,3 +51,6 @@ def createpost(request):
 def post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     return render(request, 'lnf/detail.html', {'post': post})
+    
+def error(request):
+    return render(request, 'lnf/error.html')
