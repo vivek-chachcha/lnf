@@ -1,10 +1,16 @@
-{% extends "base.html" %}
+{% extends 'basesite.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block header %}
+<p><font size="6"; color=#ADD8E6><b>Login</b></font></p>
+{% endblock %}
+
 {% block content %}
+<!--<p><a href="/signup/">Sign Up</a></p>-->
 <form action="" method="post">
 {% csrf_token %}
 {% if form.errors %}<p>Please correct the following fields:</p>{% endif %}
-<p><a href="/signup/">Sign Up</a></p>
-<p><font size="5"; color=#ADD8E6><b>Login</b></font></p>
 <div style="border-radius: 30px 30px 30px 30px; background-color:fbf5d5; color:#303030; padding:20px;">
 <div class="login_div">
         {% if form.username.errors %}<p class="error">{{ form.username.errors }}</p>{% endif %}
@@ -21,4 +27,3 @@
 </form>
 
 {% endblock %}
-		

@@ -1,10 +1,16 @@
-{% extends "base.html" %}
+{% extends 'basesite.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block header %}
+<p><font size="6"; color=#ADD8E6><b>Sign Up</b></font></p>
+{% endblock %}
+
 {% block content %}
 <form action="" method="post">
 {% csrf_token %}
+<p><font size="5"; color=#2A1500><b>Sign up with Vancouver Animal Lost 'N Found!</b></font></p>
 {% if form.errors %}<p>Please correct the following fields:</p>{% endif %}
-
-<p><font size="5"; color=#ADD8E6><b>Sign up with Vancouver Animal Lost 'N Found!</b></font></p>
 <div style="border-radius: 30px 30px 30px 30px; background-color:fbf5d5; color:#303030; padding:20px;">
 <div class="signup_div"> 
         {% if form.firstname.errors %}<p class="error">{{ form.firstname.errors }}</p>{% endif %}
