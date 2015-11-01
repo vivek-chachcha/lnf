@@ -11,6 +11,9 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('name', 'state', 'date', 'colour', 'breed', 'sex', 'description', 'picture')
+        labels = {
+            'date': 'Date (mm/dd/yy)'
+                 }
         widgets = {
             'name': TextInput(attrs={'size': 25}),
             'date': TextInput(attrs={'size': 25}),
@@ -18,4 +21,3 @@ class PostForm(forms.ModelForm):
             'breed': TextInput(attrs={'size': 25}),
             'description': Textarea(attrs={'cols': 27, 'rows': 10}),
         }
-       
