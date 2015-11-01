@@ -1,4 +1,15 @@
+{% extends 'basesite.html' %}
+
 {% load staticfiles %}
+
+{% block title %}Lost Post List Page{% endblock %}
+
+{% block header %}
+Lost Posts
+{% endblock %}
+
+{% block content %}
+
 
 <link rel="stylesheet" type="text/css" href="{%static 'posts/poststyle.css' %}" />
 <!DOCTYPE html>
@@ -80,17 +91,21 @@
 		<div id="listtable">
 			<center><h3>All Animals With Locations</h3></center>
 			<p>
-			{% for post in lost_post_list %}
-				{% ifnotequal post.lat None %}
-					<div class="row" onclick="focusOnMap({{post.id}})">
-						<div class="entry"><b>Name:</b> {{ post.name }}</div>
-						<div class="entry"><b>Color:</b> {{ post.color }}</div>
-						<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
-						<div class="entry"><b>Sex:</b>  {{ post.sex }}</div>
-					</div><br>
-				{% endifnotequal %}
-			{% endfor %}
+    {% for post in all_post_list %}
+        <hr>
+        <img src="{{post.image_url}}" height="50" width="50">
+        <p> Name: {{ post.name}} 
+        <p> State: {{post.get_state_display}}
+        <p> Date & Time {{post.get_state_display}}: {{ post.date}}
+        <p> Breed: {{ post.breed}}
+        <p> Colour: {{ post.colour}}
+        <p> Sex: {{ post.get_sex_display}}
+        <p> <a href="/{{ post.id }}/post">details</a>
+        <hr>
+    {% endfor %}
 		</div>
 	</div>
   </body>
 </html>
+
+ {% endblock %}

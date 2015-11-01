@@ -1,4 +1,14 @@
+{% extends 'basesite.html' %}
+
 {% load staticfiles %}
+
+{% block title %}Found Post List Page{% endblock %}
+
+{% block header %}
+Found Posts
+{% endblock %}
+
+{% block content %}
 
 <link rel="stylesheet" type="text/css" href="{%static 'posts/poststyle.css' %}" />
 <!DOCTYPE html>
@@ -68,7 +78,7 @@
 			{% for post in found_post_list %}
 			<div class="row">
 				<div class="entry"><b>Name:</b> {{ post.name }}</div>
-				<div class="entry"><b>Color:</b> {{ post.color }}</div>
+				<div class="entry"><b>Color:</b> {{ post.colour }}</div>
 				<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
 				<div class="entry"><b>Sex:</b>  {{ post.sex }}</div>
 			</div><br>
@@ -84,7 +94,7 @@
 				{% ifnotequal post.lat None %}
 					<div class="row" onclick="focusOnMap({{post.id}})">
 						<div class="entry"><b>Name:</b> {{ post.name }}</div>
-						<div class="entry"><b>Color:</b> {{ post.color }}</div>
+						<div class="entry"><b>Color:</b> {{ post.colour }}</div>
 						<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
 						<div class="entry"><b>Sex:</b>  {{ post.sex }}</div>
 					</div><br>
@@ -94,3 +104,5 @@
 	</div>
   </body>
 </html>
+
+ {% endblock %}
