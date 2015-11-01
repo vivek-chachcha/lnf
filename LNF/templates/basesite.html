@@ -7,9 +7,6 @@
 </head>
 
 <body>
-    <div id="nav_top_right">
-        {% if user.is_authenticated %}<p><a href="/logout/">Logout</a></p>{% else %}<p><a href="/login/">Login</a></p>{% endif %}
-    </div> 
 	<div id="fullbody">
     <div id="sidebar">
 		<center><b>NAVIGATION</b><br><br>
@@ -18,8 +15,13 @@
         <a href="/lostposts/">Lost Pets</a><br>
         <a href="/foundposts/">Found Pets</a><br><hr>
         {% block sidebar %}
-        <a href="/signup/">Sign Up</a><br>
-        <a href="/login/">Login</a><br>
+		<div id="nav_top_right">
+        {% if user.is_authenticated %}<p><a href="/logout/">Logout</a></p>
+		{% else %}
+		<a href="/signup/">Sign Up</a><br>
+		<p><a href="/login/">Login</a></p>
+		{% endif %}
+        </div> 
         {% endblock %}
 		</center>
     </div>
