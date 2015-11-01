@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^error/$', views.error, name='error'),
     url(r'^createpost/$', views.createpost, name='createpost',),
     url(r'^(?P<post_id>[0-9]+)/post/$', views.post, name='post'),
-
+    url(r'^lostposts/$', views.LostPostView, name='lostposts'),
+    url(r'^foundposts/$', views.FoundPostView, name='foundposts'),
 ]

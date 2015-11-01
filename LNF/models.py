@@ -8,7 +8,7 @@ import datetime
 
 class Post(models.Model):
     lat = models.FloatField(null=True)
-    long = models.FloatField(null=True)
+    lon = models.FloatField(null=True)
     
     name = models.CharField(max_length=30)
     breed = models.CharField(max_length=30)
@@ -32,10 +32,6 @@ class Post(models.Model):
     )
     state = models.CharField(max_length=1, choices=PET_STATE_CHOICES, default='0')
 
-        # ...
-    def __str__(self):              # __unicode__ on Python 2
-        return self.description_text
-    
     def save(self, *args, **kwargs):
         self.date_created = timezone.now()
         self.modified_date = timezone.now()
@@ -50,3 +46,7 @@ class Post(models.Model):
             return self.description
         else:
             return "No description is available this pet."
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.name
+

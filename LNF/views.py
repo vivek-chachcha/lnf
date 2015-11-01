@@ -94,7 +94,7 @@ def createpost(request):
                 lat = data['results'][0]['geometry']['location']['lat']
                 lng = data['results'][0]['geometry']['location']['lng']
                 new_post.lat = float(lat)
-                new_post.long = float(lng)
+                new_post.lon = float(lng)
                 new_post.save()
             else:
                 # DO ERROR HANDLING
@@ -114,3 +114,13 @@ def post(request, post_id):
     
 def error(request):
     return render(request, 'lnf/error.html')
+
+def LostPostView(request):
+    lost_post_list = Post.objects.filter(state=0)
+    context = {'lost_post_list': lost_post_list}
+    return render(request, 'posts/lostposts.html', context)
+		
+def FoundPostView(request):
+    found_post_list = Post.objects.filter(state=1)
+    context = {'found_post_list': found_post_list}
+    return render(request, 'posts/foundposts.html', context)
