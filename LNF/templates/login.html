@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="" method="post">
+{% csrf_token %}
+{% if form.errors %}<p>Please correct the following fields:</p>{% endif %}
+<p><a href="/signup/">Sign Up</a></p>
+<p><font size="5"; color=#ADD8E6><b>Login</b></font></p>
+<div style="border-radius: 30px 30px 30px 30px; background-color:fbf5d5; color:#303030; padding:20px;">
+<div class="login_div">
+        {% if form.username.errors %}<p class="error">{{ form.username.errors }}</p>{% endif %}
+        <p><label for="username"{% if form.username.errors %} class="error"{% endif %}>Username:</label></p>
+        <p>{{ form.username }}</p>
+</div>
+<div class="login_div">
+        {% if form.password.errors %}<p class="error">{{ form.password.errors }}</p>{% endif %}
+        <p><label for="password"{% if form.password.errors %} class="error"{% endif %}>Password:</label></p>
+        <p>{{ form.password }}</p>
+</div>
+</div>
+<p><input type="submit" alt="signup" /></p>
+</form>
+
+{% endblock %}
+		
