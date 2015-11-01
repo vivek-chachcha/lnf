@@ -22,4 +22,9 @@ urlpatterns = [
     url(r'^profile/$', views.Profile, name= 'Profile'),
     url(r'^login/$', views.LoginRequest, name= 'Login'),
     url(r'^logout/$', views.LogoutRequest, name= 'Logout'),
+    url(r'^posts/$', views.posts, name='posts'),
+    url(r'^error/$', views.error, name='error'),
+    url(r'^createpost/$', views.createpost, name='createpost',),
+    url(r'^(?P<post_id>[0-9]+)/post/$', views.post, name='post'),
+
 ]

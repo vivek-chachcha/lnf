@@ -36,6 +36,10 @@ LOGIN_URL = '/login/'
 # redirect authenticated users
 LOGIN_REDIRECT_URL = '/profile/'
 
+# ROOT FOR ALL MEDIA
+MEDIA_ROOT = "LNF/static/LNF/images/"
+MEDIA_URL = "/static/LNF/images/"
+
 # Application definition
 
 INSTALLED_APPS = [

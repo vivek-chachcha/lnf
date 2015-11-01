@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>Posts</title>
+    <style>
+</style>
+  </head>
+  <body>  
+
+{% if all_post_list %}
+
+    <ul style="list-style:none">
+    {% for post in all_post_list %}
+        <li>
+        <hr>
+        <img src="{{post.image_url}}" height="50" width="50">
+        <p> Name: {{ post.name}} 
+        <p> State: {{post.get_state_display}}
+        <p> Date & Time {{post.get_state_display}}: {{ post.date}}
+        <p> Breed: {{ post.breed}}
+        <p> Colour: {{ post.colour}}
+        <p> Sex: {{ post.get_sex_display}}
+        <p> <a href="/{{ post.id }}/post">details</a>
+        <hr>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No posts are available.</p>
+{% endif %}
+
+  </body>
+</html>
