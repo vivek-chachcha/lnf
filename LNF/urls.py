@@ -30,4 +30,5 @@ urlpatterns = [
     url(r'^foundposts/$', views.FoundPostView, name='foundposts'),
     url(r'^$', views.HomeView, name='home'),
     url(r'^about/$', views.AboutView, name='about'),
+    url(r'^import/$', views.importData, name='import'),
 ]
