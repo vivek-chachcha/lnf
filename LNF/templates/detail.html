@@ -1,4 +1,13 @@
-<h1>{{ post.name }}</h1>
+{% extends 'basesite.html' %}
+
+{% block title %}Details Page{% endblock %}
+
+{% block header %}
+{{ post.name }}
+{% endblock %}
+
+{% block content %}
+
 <hr>
 <h3>{{ post.date_created }}</h3>
 <style>
@@ -14,4 +23,7 @@
         <p>
         <hr>
         <p>
+
 COMMENT SECTION
+
+{% endblock %}

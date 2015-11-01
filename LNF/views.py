@@ -71,7 +71,7 @@ def Profile(request):
 def posts(request):
     all_post_list = Post.objects.order_by('-date_created')[:]
     context = {'all_post_list': all_post_list}
-    return render(request, 'lnf/listView.html', context)
+    return render(request, 'listView.html', context)
     
 def createpost(request):
     if not request.user.is_authenticated():
@@ -106,22 +106,24 @@ def createpost(request):
     else:
         form = PostForm()
 
-    return render(request, 'lnf/createpost.html', {'form': form})
+    return render(request, 'createpost.html', {'form': form})
     
 def post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    return render(request, 'lnf/detail.html', {'post': post})
+    return render(request, 'detail.html', {'post': post})
     
 def error(request):
-    return render(request, 'lnf/error.html')
+    return render(request, 'error.html')
 
 def LostPostView(request):
-    lost_post_list = Post.objects.filter(state=0)
+    all_post_list = Post.objects.order_by('-date_created')[:]
+    lost_post_list = all_post_list.filter(state=0)
     context = {'lost_post_list': lost_post_list}
     return render(request, 'posts/lostposts.html', context)
 		
 def FoundPostView(request):
-    found_post_list = Post.objects.filter(state=1)
+    all_post_list = Post.objects.order_by('-date_created')[:]
+    found_post_list = all_post_list.filter(state=1)
     context = {'found_post_list': found_post_list}
     return render(request, 'posts/foundposts.html', context)
 
