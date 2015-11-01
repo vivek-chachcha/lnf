@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 
-{% block title %}Found Post List Page{% endblock %}
+{% block title %}Found Posts{% endblock %}
 
 {% block header %}
 Found Posts
@@ -32,7 +32,7 @@ Found Posts
 
 				"{% for post in found_post_list %}"
 					var infowindow = new google.maps.InfoWindow({
-						content : "<b>Name: </b>" + "{{ post.name }}" + "<br><b>Color: </b>" + "{{ post.color }}" + "<br><b>Breed: </b>" + "{{ post.breed }}" + "<br><b>Sex: </b>" + "{{ post.sex }}" + "<br><br>View Post",
+						content : "<b>Name: </b>" + "{{ post.name }}" + "<br><b>Date: </b>" + "{{ post.date }}" + "<br><b>Color: </b>" + "{{ post.colour }}" + "<br><b>Breed: </b>" + "{{ post.breed }}" + "<br><b>Sex: </b>" + "{{ post.get_sex_display }}" + "<br><br><a href='/{{post.id}}/post'>View Post</a>",
 					});
 
 					markers["{{post.id}}"] = new google.maps.Marker({
@@ -76,11 +76,14 @@ Found Posts
 	<div id="posttablelist" style="display:block">
 		<div id="list">
 			{% for post in found_post_list %}
-			<div class="row">
+			<div class="row">				
+				<div class="entry"><img src="{{ post.image_url }}" height="50" width="50"></div>
 				<div class="entry"><b>Name:</b> {{ post.name }}</div>
+				<div class="entry"><b>Date:</b> {{ post.get_state_display }}</div>
 				<div class="entry"><b>Color:</b> {{ post.colour }}</div>
 				<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
-				<div class="entry"><b>Sex:</b>  {{ post.sex }}</div>
+				<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>
+				<div class="entry"><a href="/{{ post.id }}/post">More Details</a></div>
 			</div><br>
 			{% endfor %}
 		</div>
@@ -94,9 +97,11 @@ Found Posts
 				{% ifnotequal post.lat None %}
 					<div class="row" onclick="focusOnMap({{post.id}})">
 						<div class="entry"><b>Name:</b> {{ post.name }}</div>
+						<div class="entry"><b>Date:</b> {{ post.get_state_display }}</div>
 						<div class="entry"><b>Color:</b> {{ post.colour }}</div>
 						<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
-						<div class="entry"><b>Sex:</b>  {{ post.sex }}</div>
+						<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div>
+						<div class="entry"><a href="/{{ post.id }}/post">More Details</a></div>
 					</div><br>
 				{% endifnotequal %}
 			{% endfor %}
