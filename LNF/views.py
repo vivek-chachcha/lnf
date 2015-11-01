@@ -124,3 +124,9 @@ def FoundPostView(request):
     found_post_list = Post.objects.filter(state=1)
     context = {'found_post_list': found_post_list}
     return render(request, 'posts/foundposts.html', context)
+
+def HomeView(request):
+    return render(request, 'home.html')
+		
+def AboutView(request):
+    return render(request, 'about.html')
