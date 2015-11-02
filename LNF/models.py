@@ -10,18 +10,21 @@ class Post(models.Model):
     lat = models.FloatField(null=True)
     lon = models.FloatField(null=True)
     
-    name = models.CharField(max_length=30)
-    breed = models.CharField(max_length=30)
-    colour = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, null=True)
+    breed = models.CharField(max_length=30, null=True)
+    colour = models.CharField(max_length=30, null=True)
     description = models.CharField(max_length=200, null=True, blank=True)
     
-    date_created = models.DateTimeField('date posted')
-    date = models.DateTimeField('date lost/found',)
+    date_created = models.DateTimeField('date posted', null=True)
+    date = models.DateTimeField('date lost/found', null=True)
     modified_date = models.DateTimeField('date last modified')
 
     PET_SEX_CHOICES = (
     ('M', 'Male'),
     ('F', 'Female'),
+    ('M/S', 'Male Neutered'),
+    ('F/S', 'Female Spayed'),
+    ('X', 'Unknown'),
     )
     sex = models.CharField(max_length=1, choices=PET_SEX_CHOICES, default='M')
 
@@ -50,3 +53,5 @@ class Post(models.Model):
     def __str__(self):              # __unicode__ on Python 2
         return self.name
 
+    class Meta:
+        unique_together = ["name", "breed", "colour", "description", "sex", "state", "date"]

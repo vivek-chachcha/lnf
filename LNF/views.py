@@ -12,6 +12,21 @@ from PIL import Image
 import json
 import urllib.parse
 import urllib.request
+from urllib.request import urlopen
+
+
+def importData(request):
+    url = "ftp://webftp.vancouver.ca/OpenData/json/LostAnimals.json"
+    data = urlopen(url).read().decode('utf-8')
+    data = json.loads(data)
+
+    for entry in data:
+        m = Post(date = entry['Date'], colour = entry['Color'], breed = entry['Breed'], name = entry['Name'], date_created = entry['DateCreated'])
+        m.sex = entry['Sex'] if entry['Sex'] else 'X'
+        m.state = 0 if entry['State'] == 'Lost' else 1
+        m.save()
+
+    return HttpResponseRedirect('/profile/')
 
 
 def UserSignUp(request):
@@ -30,7 +45,7 @@ def UserSignUp(request):
         form = UserCreateForm()
         context = {'form': form}
         return render_to_response('signup.html', context, context_instance=RequestContext(request))
-				
+                
 def LoginRequest(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/profile/')
@@ -52,7 +67,7 @@ def LoginRequest(request):
         form = LoginForm()
         context = {'form': form}
         return render_to_response('login.html', context, context_instance=RequestContext(request))
-	
+    
 def LogoutRequest(request):
     logout(request)
     return HttpResponseRedirect('/login/')
@@ -61,13 +76,13 @@ def LogoutRequest(request):
 @login_required
 def Profile(request):
     if not request.user.is_authenticated():
-	    return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/login/')
 
     lnf_user= User.objects.get(username=request.user.username)
     context = {'lnf_user': lnf_user}
     return render_to_response('profile.html', context, context_instance=RequestContext(request))
 
-		
+        
 def posts(request):
     all_post_list = Post.objects.order_by('-date_created')[:]
     context = {'all_post_list': all_post_list}
@@ -84,7 +99,7 @@ def createpost(request):
         if form.is_valid():
             # process the data in form.cleaned_data as required
             new_post = form.save(commit=False)
-	
+    
             address_input = request.POST.get('address')
             address = urllib.parse.quote_plus(address_input)
             maps_api_url = "https://maps.google.com/maps/api/geocode/json?address=%s&key=%s" % (address, "AIzaSyAHjZ8463T8-5IvzglxU4TtWx3tMxsnxnc")
@@ -120,7 +135,7 @@ def LostPostView(request):
     lost_post_list = all_post_list.filter(state=0)
     context = {'lost_post_list': lost_post_list}
     return render(request, 'posts/lostposts.html', context)
-		
+        
 def FoundPostView(request):
     all_post_list = Post.objects.order_by('-date_created')[:]
     found_post_list = all_post_list.filter(state=1)
@@ -129,6 +144,6 @@ def FoundPostView(request):
 
 def HomeView(request):
     return render(request, 'home.html')
-		
+        
 def AboutView(request):
     return render(request, 'about.html')
