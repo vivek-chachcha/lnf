@@ -76,17 +76,22 @@ Lost Posts
 	<div id="changeview"><span id="listview" onclick="swapview('listview')">LIST VIEW</span> | <span id="mapview" onclick="swapview('mapview')">MAP VIEW</span></div>
 	<div id="posttablelist" style="display:block">
 		<div id="list">
+			{% if lost_post_list %}
 			{% for post in lost_post_list %}
 			<div class="row">				
-				<div class="entry"><img src="{{ post.image_url }}" height="50" width="50"></div>
+				<div class="entry" style="float: left; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
 				<div class="entry"><b>Name:</b> {{ post.name }}</div>
 				<div class="entry"><b>Date:</b> {{ post.get_state_display }}</div>
 				<div class="entry"><b>Color:</b> {{ post.colour }}</div>
 				<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
 				<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>
 				<div class="entry"><a href="/{{ post.id }}/post">More Details</a></div>
+				<div class="entry" style="text-align: right"><i><b>Last Updated: </b> {{ post.modified_date }}</i></div>
 			</div><br>
 			{% endfor %}
+		{% else %}
+		<center> There are no available posts</center>
+		{% endif %}
 		</div>
 	</div>
 	<div id="posttablemap" style="display:none">
@@ -94,18 +99,24 @@ Lost Posts
 		<div id="listtable">
 			<center><h3>All Animals With Locations</h3></center>
 			<p>
+			{% if lost_post_list %}
 			{% for post in lost_post_list %}
 				{% ifnotequal post.lat None %}
 					<div class="row" onclick="focusOnMap({{post.id}})">
+						<div class="entry" style="float: right; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
 						<div class="entry"><b>Name:</b> {{ post.name }}</div>
 						<div class="entry"><b>Date:</b> {{ post.get_state_display }}</div>
 						<div class="entry"><b>Color:</b> {{ post.colour }}</div>
 						<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
 						<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>
 						<div class="entry"><a href="/{{ post.id }}/post">More Details</a></div>
+						<div class="entry" style="text-align: right"><i><b>Last Updated: </b> {{ post.modified_date }}</i></div>
 					</div><br>
 				{% endifnotequal %}
 			{% endfor %}
+			{% else %}
+			<center>There are no available posts</center>
+			{% endif %}
 		</div>
 	</div>
   </body>
