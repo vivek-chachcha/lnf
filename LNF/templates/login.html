@@ -7,7 +7,6 @@
 {% endblock %}
 
 {% block content %}
-<!--<p><a href="/signup/">Sign Up</a></p>-->
 <form action="" method="post">
 {% csrf_token %}
 {% if form.errors %}<p>Please correct the following fields:</p>{% endif %}

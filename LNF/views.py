@@ -50,7 +50,7 @@ username = form.cleaned_data['username'], email = form.cleaned_data['email'], pa
                 
 def LoginRequest(request):
     if request.user.is_authenticated():
-        return HttpResponseRedirect('/profile/')
+        return HttpResponseRedirect('/')
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -59,7 +59,7 @@ def LoginRequest(request):
             lnf_user = authenticate(username=username, password=password)
             if lnf_user is not None:
                 login(request, lnf_user)
-                return HttpResponseRedirect('/profile/')
+                return HttpResponseRedirect('/')
             else:
                 return render_to_response('login.html', {'form': form}, context_instance=RequestContext(request))
         else:
