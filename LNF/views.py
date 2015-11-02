@@ -116,10 +116,10 @@ def createpost(request):
                 new_post.save()
             else:
                 # DO ERROR HANDLING
+                # DO ERROR HANDLING
                 return HttpResponseRedirect('error')
             # redirect to a new URL:
             return HttpResponseRedirect('/%d/post/' % new_post.id)
-
 
     # if a GET (or any other method) we'll create a blank form
     else:
