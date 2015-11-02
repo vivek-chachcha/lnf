@@ -17,7 +17,9 @@
         <a href="/createpost/">Create Post</a><br><hr>
         {% block sidebar %}
 		<div id="nav_top_right">
-        {% if user.is_authenticated %}<p><a href="/logout/">Logout</a></p>
+        {% if user.is_authenticated %}
+		<p><a href="/logout/">Logout</a></p>
+		<p><a href="/profile/">Profile</a></p>
 		{% else %}
 		<a href="/signup/">Sign Up</a><br>
 		<p><a href="/login/">Login</a></p>
