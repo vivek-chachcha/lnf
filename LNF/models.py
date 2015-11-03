@@ -27,7 +27,7 @@ class Post(models.Model):
     ('F/S', 'Female Spayed'),
     ('X', 'Unknown'),
     )
-    sex = models.CharField(choices=PET_SEX_CHOICES, default='M')
+    sex = models.CharField(max_length=3, choices=PET_SEX_CHOICES, default='M')
 
     picture = models.ImageField(upload_to='posts', null=True, blank=True)
     PET_STATE_CHOICES = (
