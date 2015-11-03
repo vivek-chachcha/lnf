@@ -80,7 +80,7 @@ Found Posts
 			<div class="row">				
 				<div class="entry" style="float: left; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
 				<div class="entry"><b>Name:</b> {{ post.name }}</div>
-				<div class="entry"><b>Date{{ post.get_state_display }}: </b> {{post.date}} </div>
+				<div class="entry"><b>Date {{ post.get_state_display }}: </b> {{post.date}} </div>
 				<div class="entry"><b>Color:</b> {{ post.colour }}</div>
 				<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
 				<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>
@@ -104,7 +104,7 @@ Found Posts
 					<div class="row" onclick="focusOnMap({{post.id}})">
 						<div class="entry" style="float: right; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
 						<div class="entry"><b>Name:</b> {{ post.name }}</div>
-						<div class="entry"><b>Date:</b> {{ post.get_state_display }}</div>
+				        <div class="entry"><b>Date {{ post.get_state_display }}: </b> {{post.date}} </div>
 						<div class="entry"><b>Color:</b> {{ post.colour }}</div>
 						<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
 						<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>

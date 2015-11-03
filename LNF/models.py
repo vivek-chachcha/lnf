@@ -6,6 +6,7 @@ from django.conf import settings
 import os
 import datetime
 
+
 class Post(models.Model):
     lat = models.FloatField(null=True)
     lon = models.FloatField(null=True)
@@ -16,7 +17,7 @@ class Post(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     
     date_created = models.DateTimeField('date posted', null=True)
-    date = models.DateTimeField('date lost/found', null=True)
+    date = models.DateField('date lost/found', null=True)
     modified_date = models.DateTimeField('date last modified')
 
     PET_SEX_CHOICES = (
