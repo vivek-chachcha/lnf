@@ -2,7 +2,7 @@ body, head {
     text-align: center;
 }
 #listview:hover,#mapview:hover {
-	background-color: #AAA;
+	background-color: #3385A5;
 }
 #changeview {
     margin-top: 25px;
@@ -49,5 +49,5 @@ body, head {
 	background-color: #DDD;
 }
 .row:hover{
-    background-color: #AAA;
+    background-color: #CBEBF7;
 }

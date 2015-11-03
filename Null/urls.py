@@ -16,8 +16,13 @@ Including another URLconf
 """
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
+from . import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('LNF.urls')),
 ]
+
+urlpatterns += patterns('',
+        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+	)
