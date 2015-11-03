@@ -18,10 +18,10 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^signup/$', views.UserSignUp, name= 'SignUp'),
-    url(r'^profile/$', views.Profile, name= 'Profile'),
-    url(r'^login/$', views.LoginRequest, name= 'Login'),
-    url(r'^logout/$', views.LogoutRequest, name= 'Logout'),
+    url(r'^signup/$', views.signUpUser, name= 'SignUp'),
+    url(r'^profile/$', views.getProfile, name= 'Profile'),
+    url(r'^login/$', views.loginUser, name= 'Login'),
+    url(r'^logout/$', views.logoutUser, name= 'Logout'),
     url(r'^posts/$', views.posts, name='posts'),
     url(r'^error/$', views.error, name='error'),
     url(r'^createpost/$', views.createpost, name='createpost',),

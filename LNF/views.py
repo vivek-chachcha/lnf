@@ -29,7 +29,7 @@ def importData(request):
     return HttpResponseRedirect('/profile/')
 
 
-def UserSignUp(request):
+def signUpUser(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/profile/') #the user has already signed up, return to profile
     if request.method == 'POST':
@@ -47,7 +47,7 @@ username = form.cleaned_data['username'], email = form.cleaned_data['email'], pa
         context = {'form': form}
         return render_to_response('signup.html', context, context_instance=RequestContext(request))
                 
-def LoginRequest(request):
+def loginUser(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/')
     if request.method == 'POST':
@@ -69,13 +69,13 @@ def LoginRequest(request):
         context = {'form': form}
         return render_to_response('login.html', context, context_instance=RequestContext(request))
     
-def LogoutRequest(request):
+def logoutUser(request):
     logout(request)
     return HttpResponseRedirect('/login/')
 
 
 @login_required
-def Profile(request):
+def getProfile(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/login/')
 
