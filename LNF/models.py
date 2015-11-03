@@ -23,11 +23,11 @@ class Post(models.Model):
     PET_SEX_CHOICES = (
     ('M', 'Male'),
     ('F', 'Female'),
-    ('M/S', 'Male Neutered'),
+    ('M/N', 'Male Neutered'),
     ('F/S', 'Female Spayed'),
     ('X', 'Unknown'),
     )
-    sex = models.CharField(max_length=1, choices=PET_SEX_CHOICES, default='M')
+    sex = models.CharField(choices=PET_SEX_CHOICES, default='M')
 
     picture = models.ImageField(upload_to='posts', null=True, blank=True)
     PET_STATE_CHOICES = (
