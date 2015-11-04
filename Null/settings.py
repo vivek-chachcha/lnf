@@ -80,8 +80,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Null.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
