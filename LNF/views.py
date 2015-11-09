@@ -140,7 +140,28 @@ def LostPostView(request):
     return render(request, 'posts/lostposts.html', context)
         
 def FoundPostView(request):
-    all_post_list = Post.objects.order_by('-date_created')[:]
+    if (request.GET.get('name-')):
+        all_post_list = Post.objects.order_by('name')
+    elif (request.GET.get('name+')):
+        all_post_list =  Post.objects.order_by('-name')
+    elif (request.GET.get('date-')):
+        all_post_list = Post.objects.order_by('date')
+    elif (request.GET.get('date+')):
+        all_post_list = Post.objects.order_by('-date')
+    elif (request.GET.get('color-')):
+        all_post_list = Post.objects.order_by('colour')
+    elif (request.GET.get('color+')):
+        all_post_list = Post.objects.order_by('-colour')
+    elif (request.GET.get('breed-')):
+        all_post_list = Post.objects.order_by('breed')
+    elif (request.GET.get('breed+')):
+        all_post_list = Post.objects.order_by('-breed')
+    elif (request.GET.get('sex-')):
+        all_post_list = Post.objects.order_by('sex')
+    elif (request.GET.get('sex+')):
+        all_post_list = Post.objects.order_by('-sex')
+    else:
+        all_post_list = Post.objects.order_by('-date_created')[:]
     found_post_list = all_post_list.filter(state=1)
     context = {'found_post_list': found_post_list}
     return render(request, 'posts/foundposts.html', context)

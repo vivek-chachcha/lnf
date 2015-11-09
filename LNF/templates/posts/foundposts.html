@@ -73,6 +73,23 @@ Found Posts
 </head>
 <body>
 	<div id="changeview"><span id="listview" onclick="swapview('listview')">LIST VIEW</span> | <span id="mapview" onclick="swapview('mapview')">MAP VIEW</span></div>
+	<div id="sorttable">SORT BY: 
+        <form action="" method="GET">
+            {% if '-' in request.get_full_path %}
+                <input type="submit" value="NAME" name="name+">
+                <input type="submit" value="DATE" name="date+">
+                <input type="submit" value="COLOR" name="color+">
+                <input type="submit" value="BREED" name="breed+">
+                <input type="submit" value="SEX" name="sex+">
+            {% else %}
+                <input type="submit" value="NAME" name="name-">
+                <input type="submit" value="DATE" name="date-">
+                <input type="submit" value="COLOR" name="color-">
+                <input type="submit" value="BREED" name="breed-">
+                <input type="submit" value="SEX" name="sex-">
+            {% endif %}
+        </form>
+    </div><br>
 	<div id="posttablelist" style="display:block">
 		<div id="list">
 		{% if found_post_list %}
