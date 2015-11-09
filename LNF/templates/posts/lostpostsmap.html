@@ -1,0 +1,108 @@
+{% extends 'basesite.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Lost Posts{% endblock %}
+
+{% block header %}
+Lost Posts
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{%static 'posts/poststyle.css' %}" />
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Lost Posts</title>
+		<script src="https://maps.googleapis.com/maps/api/js"></script>
+		<script>
+			var map;
+			var markers = [];
+			var mapCenter = new google.maps.LatLng(49.2464056, -123.10000);
+			var mapOptions = {
+				center : mapCenter,
+				zoom : 11,
+				mapTypeId : google.maps.MapTypeId.ROADMAP
+			}
+			function initialize() {
+				var mapCanvas = document.getElementById('map');
+
+				map = new google.maps.Map(mapCanvas, mapOptions)
+
+				"{% for post in lost_post_list %}"
+					var infowindow = new google.maps.InfoWindow({
+						content : "<b>Name: </b>" + "{{ post.name }}" + "<br><b>Date: </b>" + "{{ post.date }}" + "<br><b>Color: </b>" + "{{ post.colour }}" + "<br><b>Breed: </b>" + "{{ post.breed }}" + "<br><b>Sex: </b>" + "{{ post.get_sex_display }}" + "<br><br><a href='/{{post.id}}/post'>View Post</a>",
+					});
+
+					markers["{{post.id}}"] = new google.maps.Marker({
+						position : new google.maps.LatLng("{{post.lat}}", "{{post.lon}}"),
+						map : map,
+						infowindow : infowindow,
+					});
+					
+					markers["{{post.id}}"].addListener('click', function () {
+						this.infowindow.open(map, this);
+						map.setZoom(14);
+						map.setCenter(this.getPosition());
+					});
+				"{% endfor %}"
+			}
+			google.maps.event.addDomListener(window, 'load', initialize);
+
+			function focusOnMap(id) {
+				var focusedmarker = markers[id];
+				focusedmarker.infowindow.open(map, focusedmarker);
+				map.setZoom(14);
+				map.setCenter(focusedmarker.getPosition());
+			};
+    </script>
+</head>
+<body>
+    <div id="changeview"><a href="/lostposts/list?{{request.get_full_path|slice:'15:'}}">LIST VIEW</a> | MAP VIEW</div>
+    <div id="sorttable">SORT BY: 
+        <form action="" method="GET">
+            {% if '-' in request.get_full_path %}
+                <input type="submit" value="NAME" name="name+">
+                <input type="submit" value="DATE" name="date+">
+                <input type="submit" value="COLOR" name="color+">
+                <input type="submit" value="BREED" name="breed+">
+                <input type="submit" value="SEX" name="sex+">
+            {% else %}
+                <input type="submit" value="NAME" name="name-">
+                <input type="submit" value="DATE" name="date-">
+                <input type="submit" value="COLOR" name="color-">
+                <input type="submit" value="BREED" name="breed-">
+                <input type="submit" value="SEX" name="sex-">
+            {% endif %}
+        </form>
+    </div><br>
+	<div id="posttablemap" style="display:block">
+		<div id="map"></div>
+		<div id="listtable">
+			<center><h3>All Animals With Locations</h3></center>
+			<p>
+			{% if lost_post_list %}
+			{% for post in lost_post_list %}
+				{% ifnotequal post.lat None %}
+					<div class="row" onclick="focusOnMap({{post.id}})">
+						<div class="entry" style="float: right; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
+						<div class="entry"><b>Name:</b> {{ post.name }}</div>
+				        <div class="entry"><b>Date {{ post.get_state_display }}: </b> {{post.date}} </div>
+						<div class="entry"><b>Color:</b> {{ post.colour }}</div>
+						<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
+						<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>
+						<div class="entry"><a href="/{{ post.id }}/post">More Details</a></div>
+						<div class="entry" style="text-align: right"><i><b>Last Updated: </b> {{ post.modified_date }}</i></div>
+					</div><br>
+				{% endifnotequal %}
+			{% endfor %}
+			{% else %}
+			<center>There are no available posts</center>
+			{% endif %}
+		</div>
+	</div>
+  </body>
+</html>
+
+ {% endblock %}
