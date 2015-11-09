@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 	'LNF',
 ]
+INSTALLED_APPS += ['django_social_share']
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,6 +79,9 @@ TEMPLATES = [
             ],
         },
     },
+]
+TEMPLATE_CONTEXT_PROCESSORS = [
+        'django.core.context_processors.request'
 ]
 
 

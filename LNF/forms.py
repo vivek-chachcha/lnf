@@ -8,7 +8,11 @@ from django.utils import timezone
 from django.core.files import File
 from django.conf import settings
 from .models import Post
-
+from django.core.exceptions import ValidationError
+import json
+import urllib.parse
+import urllib.request
+from urllib.request import urlopen
 
 class UserCreateForm(UserCreationForm):
     alphabets_only = RegexValidator(r'^[a-zA-Z]*$', 'Only English letters are allowed.')
@@ -35,7 +39,18 @@ class LoginForm(forms.Form):
     password        = forms.CharField(label=(u'Password'), widget=forms.PasswordInput(render_value=False))
 
 class PostForm(forms.ModelForm):
-        
+    
+    def valid_address(value):
+        address = urllib.parse.quote_plus(value)
+        maps_api_url = "https://maps.google.com/maps/api/geocode/json?address=%s&key=%s" % (address,"AIzaSyAHjZ8463T8-5IvzglxU4TtWx3tMxsnxnc")
+        response = urllib.request.urlopen(maps_api_url)
+        data = json.loads(response.read().decode('utf8'))
+        if data['status'] != 'OK':
+            raise ValidationError('Address is not valid.')    
+        if not ((49.261226-1 <= float(data['results'][0]['geometry']['location']['lat']) <= 49.261226+1) | (-123.1139268-1 <= float(data['results'][0]['geometry']['location']['lng']) <= -123.1139268+1)):
+            raise ValidationError('Address is not valid.')    
+            
+    address = forms.CharField(label=(u'Address'), required=False, validators=[valid_address], widget=TextInput(attrs={'size': 25}))    
     class Meta:
         model = Post
         fields = ('name', 'state', 'date', 'colour', 'breed', 'sex', 'description', 'picture')
@@ -49,3 +64,4 @@ class PostForm(forms.ModelForm):
             'breed': TextInput(attrs={'size': 25}),
             'description': Textarea(attrs={'cols': 27, 'rows': 10}),
         }
+

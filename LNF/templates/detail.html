@@ -1,5 +1,5 @@
 {% extends 'basesite.html' %}
-
+{% load social_share %} 
 {% block title %}Details Page{% endblock %}
 
 {% block header %}
@@ -9,7 +9,9 @@
 {% block content %}
 
 <hr>
-<h3>{{ post.date_created }}</h3>
+Date posted: {{ post.date_created }}
+<p>
+{% post_to_facebook "{{post.id}}/post" "Share on Facebook" %}
 <style>
 </style>
         <img src="{{post.image_url}}" height="200" width="200">

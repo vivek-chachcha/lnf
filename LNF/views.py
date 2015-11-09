@@ -100,23 +100,7 @@ def createpost(request):
         if form.is_valid():
             # process the data in form.cleaned_data as required
             new_post = form.save(commit=False)
-    
-            address_input = request.POST.get('address')
-            address = urllib.parse.quote_plus(address_input)
-            maps_api_url = "https://maps.google.com/maps/api/geocode/json?address=%s&key=%s" % (address, 
-"AIzaSyAHjZ8463T8-5IvzglxU4TtWx3tMxsnxnc")
-            response = urllib.request.urlopen(maps_api_url)
-            data = json.loads(response.read().decode('utf8'))
-            if data['status'] == 'OK':
-                lat = data['results'][0]['geometry']['location']['lat']
-                lng = data['results'][0]['geometry']['location']['lng']
-                new_post.lat = float(lat)
-                new_post.lon = float(lng)
-                new_post.save()
-            else:
-                # DO ERROR HANDLING
-                # DO ERROR HANDLING
-                return HttpResponseRedirect('error')
+            new_post.save(request.POST.get('address'))
             # redirect to a new URL:
             return HttpResponseRedirect('/%d/post/' % new_post.id)
 

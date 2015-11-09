@@ -5,7 +5,10 @@ from django.core.files import File
 from django.conf import settings
 import os
 import datetime
-
+import json
+import urllib.parse
+import urllib.request
+from urllib.request import urlopen
 
 class Post(models.Model):
     lat = models.FloatField(null=True)
@@ -36,10 +39,21 @@ class Post(models.Model):
     )
     state = models.CharField(max_length=1, choices=PET_STATE_CHOICES, default='0')
 
-    def save(self, *args, **kwargs):
+    def save(self, address_input, *args, **kwargs):
         self.date_created = timezone.now()
         self.modified_date = timezone.now()
+        
+        address = urllib.parse.quote_plus(address_input)
+        maps_api_url = "https://maps.google.com/maps/api/geocode/json?address=%s&key=%s" % (address,"AIzaSyAHjZ8463T8-5IvzglxU4TtWx3tMxsnxnc")
+        response = urllib.request.urlopen(maps_api_url)
+        data = json.loads(response.read().decode('utf8'))
+        if address_input != '':
+            self.lat = float(data['results'][0]['geometry']['location']['lat'])
+            self.lon = float(data['results'][0]['geometry']['location']['lng'])
+        
         super(Post,self).save(self, *args, **kwargs)
+
+
     def image_url(self):
         if self.picture and hasattr(self.picture, 'url'):
             return self.picture.url
