@@ -56,25 +56,11 @@ Found Posts
 				map.setZoom(14);
 				map.setCenter(focusedmarker.getPosition());
 			};
-
-			function swapview(view) {
-				if (view === "listview") {
-					document.getElementById('posttablelist').style.display = 'block';
-					document.getElementById('posttablemap').style.display = 'none';
-				} else {
-					document.getElementById('posttablemap').style.display = 'block';
-					document.getElementById('posttablelist').style.display = 'none';
-					google.maps.event.trigger(map, 'resize');
-					map.setCenter(mapCenter);
-					map.setZoom(11);
-				}
-			}
     </script>
 </head>
 <body>
-	<div id="changeview"><span id="listview" onclick="swapview('listview')">LIST VIEW</span> | <span id="mapview" onclick="swapview('mapview')">MAP VIEW</span></div>
-    <div id="changeview"><a href="/foundposts/list">LIST VIEW</a> | <a href="/foundposts/map">MAP VIEW</a></div>
-	<div id="sorttable">SORT BY: 
+    <div id="changeview"><a href="/foundposts/list?{{request.get_full_path|slice:'16:'}}">LIST VIEW</a> | MAP VIEW</div>
+    <div id="sorttable">SORT BY: 
         <form action="" method="GET">
             {% if '-' in request.get_full_path %}
                 <input type="submit" value="NAME" name="name+">
@@ -91,27 +77,7 @@ Found Posts
             {% endif %}
         </form>
     </div><br>
-	<div id="posttablelist" style="display:block">
-		<div id="list">
-		{% if found_post_list %}
-			{% for post in found_post_list %}
-			<div class="row">				
-				<div class="entry" style="float: left; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
-				<div class="entry"><b>Name:</b> {{ post.name }}</div>
-				<div class="entry"><b>Date {{ post.get_state_display }}: </b> {{post.date}} </div>
-				<div class="entry"><b>Color:</b> {{ post.colour }}</div>
-				<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
-				<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>
-				<div class="entry"><a href="/{{ post.id }}/post">More Details</a></div>
-				<div class="entry" style="text-align: right"><i><b>Last Updated: </b> {{ post.modified_date }}</i></div>
-			</div><br>
-			{% endfor %}
-		{% else %}
-		<center> There are no available posts</center>
-		{% endif %}
-		</div>
-	</div>
-	<div id="posttablemap" style="display:none">
+	<div id="posttablemap" style="display:block">
 		<div id="map"></div>
 		<div id="listtable">
 			<center><h3>All Animals With Locations</h3></center>

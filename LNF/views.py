@@ -133,13 +133,19 @@ def post(request, post_id):
 def error(request):
     return render(request, 'error.html')
 
-def LostPostView(request):
+def lostPostsList(request):
+    all_post_list = Post.objects.order_by('-date_created')[:]
+    lost_post_list = all_post_list.filter(state=0)
+    context = {'lost_post_list': lost_post_list}
+    return render(request, 'posts/lostposts.html', context)
+    
+def lostPostsMap(request):
     all_post_list = Post.objects.order_by('-date_created')[:]
     lost_post_list = all_post_list.filter(state=0)
     context = {'lost_post_list': lost_post_list}
     return render(request, 'posts/lostposts.html', context)
         
-def FoundPostView(request):
+def foundPosts(request):
     if (request.GET.get('name-')):
         all_post_list = Post.objects.order_by('name')
     elif (request.GET.get('name+')):
@@ -162,9 +168,14 @@ def FoundPostView(request):
         all_post_list = Post.objects.order_by('-sex')
     else:
         all_post_list = Post.objects.order_by('-date_created')[:]
+        
     found_post_list = all_post_list.filter(state=1)
     context = {'found_post_list': found_post_list}
-    return render(request, 'posts/foundposts.html', context)
+    
+    if 'map' in request.get_full_path():
+        return render(request, 'posts/foundpostsmap.html', context)
+    else:
+        return render(request, 'posts/foundpostslist.html', context)
 
 def HomeView(request):
     return render(request, 'home.html')

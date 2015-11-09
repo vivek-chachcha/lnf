@@ -1,0 +1,61 @@
+{% extends 'basesite.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Found Posts{% endblock %}
+
+{% block header %}
+Found Posts
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{%static 'posts/poststyle.css' %}" />
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Found Posts</title>
+    </head>
+<body>
+   <div id="changeview">LIST VIEW | <a href="/foundposts/map?{{request.get_full_path|slice:'17:'}}">MAP VIEW</a></div>
+	<div id="sorttable">SORT BY: 
+        <form action="" method="GET">
+            {% if '-' in request.get_full_path %}
+                <input type="submit" value="NAME" name="name+">
+                <input type="submit" value="DATE" name="date+">
+                <input type="submit" value="COLOR" name="color+">
+                <input type="submit" value="BREED" name="breed+">
+                <input type="submit" value="SEX" name="sex+">
+            {% else %}
+                <input type="submit" value="NAME" name="name-">
+                <input type="submit" value="DATE" name="date-">
+                <input type="submit" value="COLOR" name="color-">
+                <input type="submit" value="BREED" name="breed-">
+                <input type="submit" value="SEX" name="sex-">
+            {% endif %}
+        </form>
+    </div><br>
+	<div id="posttablelist" style="display:block">
+		<div id="list">
+		{% if found_post_list %}
+			{% for post in found_post_list %}
+			<div class="row">				
+				<div class="entry" style="float: left; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
+				<div class="entry"><b>Name:</b> {{ post.name }}</div>
+				<div class="entry"><b>Date {{ post.get_state_display }}: </b> {{post.date}} </div>
+				<div class="entry"><b>Color:</b> {{ post.colour }}</div>
+				<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
+				<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>
+				<div class="entry"><a href="/{{ post.id }}/post">More Details</a></div>
+				<div class="entry" style="text-align: right"><i><b>Last Updated: </b> {{ post.modified_date }}</i></div>
+			</div><br>
+			{% endfor %}
+		{% else %}
+		<center> There are no available posts</center>
+		{% endif %}
+		</div>
+	</div>
+  </body>
+</html>
+
+ {% endblock %}
