@@ -19,20 +19,41 @@ Lost Posts
 <body>
    <div id="changeview">LIST VIEW | <a href="/lostposts/map?{{request.get_full_path|slice:'16:'}}">MAP VIEW</a></div>
 	<div id="sorttable">SORT BY: 
-        <form action="" method="GET">
+        <form action="" method="GET" style="display:inline">
             {% if '-' in request.get_full_path %}
-                <input type="submit" value="NAME" name="name+">
-                <input type="submit" value="DATE" name="date+">
-                <input type="submit" value="COLOR" name="color+">
-                <input type="submit" value="BREED" name="breed+">
-                <input type="submit" value="SEX" name="sex+">
+                <input type="submit" value="NAME" name="sort+">
+                <input type="submit" value="DATE" name="sort+">
+                <input type="submit" value="COLOUR" name="sort+">
+                <input type="submit" value="BREED" name="sort+">
+                <input type="submit" value="SEX" name="sort+">
             {% else %}
-                <input type="submit" value="NAME" name="name-">
-                <input type="submit" value="DATE" name="date-">
-                <input type="submit" value="COLOR" name="color-">
-                <input type="submit" value="BREED" name="breed-">
-                <input type="submit" value="SEX" name="sex-">
+                <input type="submit" value="NAME" name="sort-">
+                <input type="submit" value="DATE" name="sort-">
+                <input type="submit" value="COLOUR" name="sort-">
+                <input type="submit" value="BREED" name="sort-">
+                <input type="submit" value="SEX" name="sort-">
             {% endif %}
+            <input type="hidden" name="list" value="{{found_post_list}}">
+        </form>
+    </div><br>
+    <div id="filtertable">FILTER BY: 
+        <form action="" method="GET" style="display:inline">
+            NAME: <input type="text" name="name">
+            <div tooltip="Enter a start and end range, or enter a specific date in the first box" style="display:inline">DATE: <input type="date" name="date1">
+            <input type="date" name="date2"></div>
+            COLOUR: <input type="text" name="colour">
+            BREED: <input type="text" name="breed">
+            SEX:
+            <select name="sex">
+            <option value=""></option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <option value="M/N">Male Neutered</option>
+            <option value="F/S" name="sex">Female Spayed</option>
+            <option value="X" name="sex">Unknown</option>
+            </select>
+            <input type="submit" value="Submit" name="filter">
+            <input type="submit" value="Reset Search" name="reset">
         </form>
     </div><br>
 	<div id="posttablelist" style="display:block">

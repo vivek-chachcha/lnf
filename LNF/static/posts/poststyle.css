@@ -51,3 +51,22 @@ body, head {
 .row:hover{
     background-color: #CBEBF7;
 }
+[tooltip]:before {
+    position: absolute;
+    content: attr(tooltip);
+    opacity: 0;
+    padding: 10px;
+    border-radius: 10px;
+}
+[tooltip]:hover:before {
+    opacity: 1;
+    background: white;
+    border-color: #000000;
+    border-style: solid;
+    border-width: 3px;
+    margin-top:-50px;
+    margin-left:5px;
+}
+[tooltip]:not([tooltip-persistent]):before{
+    pointer-events:none;
+}

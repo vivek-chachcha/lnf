@@ -13,6 +13,8 @@ import urllib.parse
 import urllib.request
 from urllib.request import urlopen
 
+import logging
+logger = logging.getLogger(__name__)
 
 def importData(request):
     url = "ftp://webftp.vancouver.ca/OpenData/json/LostAnimals.json"
@@ -129,41 +131,67 @@ def error(request):
     return render(request, 'error.html')
 
 def posts(request):
-    if (request.GET.get('name-')):
-        all_post_list = Post.objects.order_by('name')
-    elif (request.GET.get('name+')):
-        all_post_list =  Post.objects.order_by('-name')
-    elif (request.GET.get('date-')):
-        all_post_list = Post.objects.order_by('date')
-    elif (request.GET.get('date+')):
-        all_post_list = Post.objects.order_by('-date')
-    elif (request.GET.get('color-')):
-        all_post_list = Post.objects.order_by('colour')
-    elif (request.GET.get('color+')):
-        all_post_list = Post.objects.order_by('-colour')
-    elif (request.GET.get('breed-')):
-        all_post_list = Post.objects.order_by('breed')
-    elif (request.GET.get('breed+')):
-        all_post_list = Post.objects.order_by('-breed')
-    elif (request.GET.get('sex-')):
-        all_post_list = Post.objects.order_by('sex')
-    elif (request.GET.get('sex+')):
-        all_post_list = Post.objects.order_by('-sex')
-    else:
-        all_post_list = Post.objects.order_by('-date_created')[:]
+    all_post_list = Post.objects.order_by('-date_created')[:]
     
+    if (request.GET.get('reset')):
+        all_post_list = Post.objects.order_by('-date_created')[:]
+        
+    if (request.GET.get('filter')):         
+        name_crit = request.GET.get('name')
+        if (name_crit != ""):
+            all_post_list = all_post_list.filter(name__icontains=name_crit)
+
+        date_start = request.GET.get('date1')
+        date_end = request.GET.get('date2')
+        if (date_start != ""):
+            if (date_end != ""):
+                all_post_list = all_post_list.filter(date__range=[date_start, date_end])
+            else:
+                all_post_list = all_post_list.filter(date=date_start)
+
+        colour_crit = request.GET.get('colour')
+        if (colour_crit != ""):
+            all_post_list = all_post_list.filter(colour__icontains=colour_crit)
+        
+        breed_crit = request.GET.get('breed')
+        if (breed_crit != ""):
+            all_post_list = all_post_list.filter(breed__icontains=breed_crit)
+
+        sex_crit = request.GET.get('sex')
+        if (sex_crit != ""):
+            all_post_list = all_post_list.filter(sex=sex_crit)
+    
+    if (request.GET.get('sort-')):
+        sort_criteria = request.GET.get('sort-').lower()
+        current_posts = request.GET.get('list')
+        split_posts = current_posts.split(",")
+        ids = [post[8:9] for post in split_posts]
+        ids_int = [int(id) for id in ids]
+        logger.warning("ids: " + str(ids))
+        filtered_posts = Post.objects.filter(pk__in=ids)
+        all_post_list = filtered_posts.order_by(sort_criteria)
+    elif (request.GET.get('sort+')):
+        sort_criteria = request.GET.get('sort+').lower()
+        current_posts = request.GET.get('list')
+        split_posts = current_posts.split(",")
+        ids = [post[8:9] for post in split_posts]
+        ids_int = [int(id) for id in ids]
+        logger.warning("ids: " + str(ids))
+        filtered_posts = Post.objects.filter(pk__in=ids)
+        all_post_list = filtered_posts.order_by("-" + sort_criteria)
+
     if 'found' in request.get_full_path():
         found_post_list = all_post_list.filter(state=1)
         context = {'found_post_list': found_post_list}
-    
+
         if 'map' in request.get_full_path():
             return render(request, 'posts/foundpostsmap.html', context)
         else:
             return render(request, 'posts/foundpostslist.html', context)
-    else:   
+    else:
         lost_post_list = all_post_list.filter(state=0)
         context = {'lost_post_list': lost_post_list}
-    
+
         if 'map' in request.get_full_path():
             return render(request, 'posts/lostpostsmap.html', context)
         else:
