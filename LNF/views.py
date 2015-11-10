@@ -13,9 +13,6 @@ import urllib.parse
 import urllib.request
 from urllib.request import urlopen
 
-import logging
-logger = logging.getLogger(__name__)
-
 def importData(request):
     url = "ftp://webftp.vancouver.ca/OpenData/json/LostAnimals.json"
     data = urlopen(url).read().decode('utf-8')
@@ -131,12 +128,15 @@ def error(request):
     return render(request, 'error.html')
 
 def posts(request):
+    # default all post list
     all_post_list = Post.objects.order_by('-date_created')[:]
     
+    # reset all post list if request is to reset filters
     if (request.GET.get('reset')):
         all_post_list = Post.objects.order_by('-date_created')[:]
         
-    if (request.GET.get('filter')):         
+    # handle filter functionality
+    if (request.GET.get('filter')):
         name_crit = request.GET.get('name')
         if (name_crit != ""):
             all_post_list = all_post_list.filter(name__icontains=name_crit)
@@ -161,6 +161,7 @@ def posts(request):
         if (sex_crit != ""):
             all_post_list = all_post_list.filter(sex=sex_crit)
     
+    # handle sorting functionality based on current filtered set of posts
     if (request.GET.get('sort-')):
         sort_criteria = request.GET.get('sort-').lower()
         current_posts = request.GET.get('list')
@@ -180,6 +181,7 @@ def posts(request):
         filtered_posts = Post.objects.filter(pk__in=ids)
         all_post_list = filtered_posts.order_by("-" + sort_criteria)
 
+    # filter one more time based on lost/found state and return correct html page
     if 'found' in request.get_full_path():
         found_post_list = all_post_list.filter(state=1)
         context = {'found_post_list': found_post_list}
