@@ -10,7 +10,8 @@ import datetime
 class Post(models.Model):
     lat = models.FloatField(null=True)
     lon = models.FloatField(null=True)
-    
+
+    author = models.CharField(max_length=200, null=True)
     name = models.CharField(max_length=30, null=True)
     breed = models.CharField(max_length=30, null=True)
     colour = models.CharField(max_length=30, null=True)
@@ -56,3 +57,20 @@ class Post(models.Model):
 
     class Meta:
         unique_together = ["name", "breed", "colour", "description", "sex", "state", "date"]
+		
+class Comment(models.Model):
+    post = models.ForeignKey(Post, related_name='comments')
+    author = models.CharField(max_length=200, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_known_location = models.CharField(max_length=200, null=True, blank=True)
+    photo = models.ImageField(upload_to='comments', null=True, blank=True)
+    text = models.TextField()
+
+    def __unicode__(self):              
+        return self.text	
+
+    def image_url(self):
+        if self.photo and hasattr(self.photo, 'url'):
+            return self.photo.url
+        else:
+            return os.path.join(settings.MEDIA_URL, 'paw.png')

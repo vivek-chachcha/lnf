@@ -26,4 +26,33 @@
 
 COMMENT SECTION
 
+{% for comment in post.comments.all %}
+    <div class="comment">
+	    <p>_____________________________________________________________</p>
+        <p><div class="date"><b>created on </b>{{ comment.date_created }}</div></p>
+        <p><b>comment written by </b><strong>{{ comment.author }}</strong></p>
+
+		<p><b>Photo: </b><img src="{{comment.image_url}}" height="200" width="200"></p>
+
+		<p><b>Last known location: </b>{{ comment.last_known_location}}</p>
+        <b>Comment: </b><p>{{ comment.text|linebreaks }}</p>
+    </div>
+{% empty %}
+    <p>This post has no comments yet...</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+<p>_____________________________________________________________</p>
+<h2>Add Comment</h2>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" name="submit" value="Submit" />
+</form>
+{% else %}
+Please login to add comments.
+{% endif %}
 {% endblock %}

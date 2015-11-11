@@ -5,8 +5,8 @@ from LNF.forms import UserCreateForm, LoginForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from .models import Post
-from .forms import PostForm
+from .models import Post, Comment
+from .forms import PostForm, CommentForm
 from PIL import Image
 import json
 import urllib.parse
@@ -100,7 +100,7 @@ def createpost(request):
         if form.is_valid():
             # process the data in form.cleaned_data as required
             new_post = form.save(commit=False)
-    
+            new_post.author = request.user.username    
             address_input = request.POST.get('address')
             address = urllib.parse.quote_plus(address_input)
             maps_api_url = "https://maps.google.com/maps/api/geocode/json?address=%s&key=%s" % (address, 
@@ -128,6 +128,15 @@ def createpost(request):
     
 def post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
+    if request.user.is_authenticated():
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user.get_full_name()
+            comment.save()
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return render(request, 'detail.html', {'post': post, 'form': form,})
     return render(request, 'detail.html', {'post': post})
     
 def error(request):
@@ -144,6 +153,12 @@ def FoundPostView(request):
     found_post_list = all_post_list.filter(state=1)
     context = {'found_post_list': found_post_list}
     return render(request, 'posts/foundposts.html', context)
+
+def viewMyPost(request):
+    all_post_list = Post.objects.order_by('-date_created')[:]
+    my_post_list = all_post_list.filter(author = request.user.username)
+    context = {'my_post_list' : my_post_list}
+    return render(request, 'posts/mypost.html', context)
 
 def HomeView(request):
     return render(request, 'home.html')
