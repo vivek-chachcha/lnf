@@ -168,7 +168,6 @@ def posts(request):
         split_posts = current_posts.split(",")
         ids = [post[8:9] for post in split_posts]
         ids_int = [int(id) for id in ids]
-        logger.warning("ids: " + str(ids))
         filtered_posts = Post.objects.filter(pk__in=ids)
         all_post_list = filtered_posts.order_by(sort_criteria)
     elif (request.GET.get('sort+')):
@@ -177,7 +176,6 @@ def posts(request):
         split_posts = current_posts.split(",")
         ids = [post[8:9] for post in split_posts]
         ids_int = [int(id) for id in ids]
-        logger.warning("ids: " + str(ids))
         filtered_posts = Post.objects.filter(pk__in=ids)
         all_post_list = filtered_posts.order_by("-" + sort_criteria)
 
