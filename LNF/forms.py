@@ -38,6 +38,9 @@ class LoginForm(forms.Form):
     username        = forms.CharField(label=(u'Username'))
     password        = forms.CharField(label=(u'Password'), widget=forms.PasswordInput(render_value=False))
 
+class BookmarkForm(forms.Form):
+    bookmark        = forms.BooleanField(label=(u'Bookmark Post'),required=False)
+
 class PostForm(forms.ModelForm):
     
     def valid_address(value):
@@ -64,4 +67,4 @@ class PostForm(forms.ModelForm):
             'breed': TextInput(attrs={'size': 25}),
             'description': Textarea(attrs={'cols': 27, 'rows': 10}),
         }
-
+        

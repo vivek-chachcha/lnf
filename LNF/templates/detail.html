@@ -1,5 +1,6 @@
 {% extends 'basesite.html' %}
 {% load social_share %} 
+{% load static %}
 {% block title %}Details Page{% endblock %}
 
 {% block header %}
@@ -11,9 +12,13 @@
 <hr>
 Date posted: {{ post.date_created }}
 <p>
-{% post_to_facebook "{{post.id}}/post" "Share on Facebook" %}
-<style>
-</style>
+<div class="share">Share Post: {% post_to_facebook "{{post.id}}/post" "______" %}</div>
+
+ <form enctype="multipart/form-data" action="" method="post">
+  {% csrf_token %}
+    {{ form }}
+	<input type="submit" value="OK">
+  </form>
         <img src="{{post.image_url}}" height="200" width="200">
         <p> Name: {{ post.name}} 
         <p> State: {{post.get_state_display}}
@@ -28,4 +33,19 @@ Date posted: {{ post.date_created }}
 
 COMMENT SECTION
 
+<style>
+    .share {
+        display: inline-block;
+    }
+    .facebook-this {
+        display: inline-block;
+        background-image: url("{% static 'fb.png' %}");
+        background-size: 100%;
+        background-repeat: no-repeat;
+    }
+    .facebook-this a {
+        color:rgba(0,0,0,0.0);
+    }
+    }
+</style>
 {% endblock %}

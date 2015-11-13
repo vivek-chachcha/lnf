@@ -58,7 +58,7 @@ class Post(models.Model):
         if self.picture and hasattr(self.picture, 'url'):
             return self.picture.url
         else:
-            return os.path.join(settings.MEDIA_URL, 'paw.png')
+            return os.path.join(settings.STATIC_URL, 'paw.png')
     def description_text(self):
         if self.description:
             return self.description
@@ -70,3 +70,18 @@ class Post(models.Model):
 
     class Meta:
         unique_together = ["name", "breed", "colour", "description", "sex", "state", "date"]
+        
+class BookmarkedPost(models.Model):
+    post = models.ForeignKey(Post)
+    date_bmed = models.DateTimeField()
+    bmList = models.ForeignKey('BookmarkedPostList')
+    
+    def save(self, *args, **kwargs):
+        self.date_bmed = timezone.now()
+        super(BookmarkedPost,self).save(self, *args, **kwargs)
+       
+
+class BookmarkedPostList(models.Model):
+    user = models.OneToOneField(User, editable=False)
+    bmList = models.ManyToManyField(BookmarkedPost, blank=True)
+

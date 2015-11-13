@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^(?P<post_id>[0-9]+)/post/$', views.post, name='post'),
     url(r'^lostposts/$', views.LostPostView, name='lostposts'),
     url(r'^foundposts/$', views.FoundPostView, name='foundposts'),
+    url(r'^bmposts/$', views.displayBookmarkedPosts, name='bmposts'),
     url(r'^$', views.HomeView, name='home'),
     url(r'^about/$', views.AboutView, name='about'),
     url(r'^import/$', views.importData, name='import'),

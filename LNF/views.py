@@ -1,11 +1,11 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404, render
 from django.template import RequestContext, loader
-from LNF.forms import UserCreateForm, LoginForm
+from LNF.forms import UserCreateForm, LoginForm,BookmarkForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from .models import Post
+from .models import Post, BookmarkedPostList, BookmarkedPost
 from .forms import PostForm
 from PIL import Image
 import json
@@ -38,6 +38,8 @@ def signUpUser(request):
             user = User.objects.create_user(first_name = form.cleaned_data['firstname'], last_name = form.cleaned_data['lastname'], 
 username = form.cleaned_data['username'], email = form.cleaned_data['email'], password = form.cleaned_data['password1'])
             user.save()
+            bmList = BookmarkedPostList(user=user)
+            bmList.save(user)
             return HttpResponseRedirect('/profile/')
         else:
             return render_to_response('signup.html', {'form': form}, context_instance=RequestContext(request))
@@ -92,19 +94,12 @@ def posts(request):
 def createpost(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/login/')
-    # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
         form = PostForm(request.POST, request.FILES)
-        # check whether it's valid:
         if form.is_valid():
-            # process the data in form.cleaned_data as required
             new_post = form.save(commit=False)
             new_post.save(request.POST.get('address'))
-            # redirect to a new URL:
             return HttpResponseRedirect('/%d/post/' % new_post.id)
-
-    # if a GET (or any other method) we'll create a blank form
     else:
         form = PostForm()
 
@@ -112,7 +107,30 @@ def createpost(request):
     
 def post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    return render(request, 'detail.html', {'post': post})
+    if request.method == 'POST':    
+    
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect('/login/')
+            
+        form = BookmarkForm(request.POST)
+        if form.is_valid():
+            bml = BookmarkedPostList.objects.get(user=request.user)
+            bmp = BookmarkedPost.objects.filter(bmList=bml,post=Post.objects.get(id=post_id))
+            if bmp.exists():
+                bmp = BookmarkedPost.objects.get(bmList=bml,post=Post.objects.get(id=post_id))
+                bml.bmList.remove(bmp)
+                bmp.delete()
+            isBookmarked = form.cleaned_data['bookmark']        
+            if isBookmarked:
+                newBmPost = BookmarkedPost(post=Post.objects.get(id=post_id),bmList=bml)
+                newBmPost.save()
+                bml.bmList.add(newBmPost)
+            
+            return HttpResponseRedirect('/%s/post/' % post_id)
+    else:
+        form = BookmarkForm()
+
+    return render(request, 'detail.html', {'post': post, 'form':form})
     
 def error(request):
     return render(request, 'error.html')
@@ -129,6 +147,14 @@ def FoundPostView(request):
     context = {'found_post_list': found_post_list}
     return render(request, 'posts/foundposts.html', context)
 
+def displayBookmarkedPosts(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/login/')
+    bm_post_list = BookmarkedPostList.objects.get(user=request.user).bmList.all().order_by('-date_bmed')[:]
+    all_post_list = [bookmarkedpost.post for bookmarkedpost in bm_post_list]
+    context = {'title': 'Bookmarked Posts', 'all_post_list': all_post_list}
+    return render(request, 'listView.html', context)
+    
 def HomeView(request):
     return render(request, 'home.html')
         
