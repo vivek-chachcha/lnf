@@ -8,9 +8,8 @@
 
 {% block content %}
 
-<hr>
-<p> Post written by: {{ post.author}} 
-<h3>{{ post.date_created }}</h3>
+<hr> 
+<h3> Post written by: {{ post.author}} on <h4>{{ post.date_created }}</h4></h3>
 <style>
 </style>
         <img src="{{post.image_url}}" height="200" width="200">
@@ -24,12 +23,13 @@
         <p>
         <hr>
         <p>
-
-COMMENT SECTION
+<div style="background-color:#9999CC; color:#800000; padding:20px; border-top-left-radius: 25px; border-top-right-radius: 25px;">
+<h3>COMMENT SECTION</h3>
+</div>
+<div style="background-color:#E6E6FA; color:#800000; padding:20px; border-bottom-right-radius: 25px;border-bottom-left-radius: 25px ">
 
 {% for comment in post.comments.all %}
     <div class="comment">
-	    <p>_____________________________________________________________</p>
         <p><div class="date"><b>created on </b>{{ comment.date_created }}</div></p>
         <p><b>comment written by </b><strong>{{ comment.author }}</strong></p>
 
@@ -37,13 +37,13 @@ COMMENT SECTION
 
 		<p><b>Last known location: </b>{{ comment.last_known_location}}</p>
         <b>Comment: </b><p>{{ comment.text|linebreaks }}</p>
+		<p>_____________________________________________________________</p>
     </div>
 {% empty %}
     <p>This post has no comments yet...</p>
 {% endfor %}
 
 {% if user.is_authenticated %}
-<p>_____________________________________________________________</p>
 <h2>Add Comment</h2>
 
 <form action="" method="POST">
@@ -56,4 +56,5 @@ COMMENT SECTION
 {% else %}
 Please login to add comments.
 {% endif %}
+</div>
 {% endblock %}
