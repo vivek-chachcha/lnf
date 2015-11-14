@@ -18,11 +18,11 @@
         {% block sidebar %}
 		<div id="nav_top_right">
         {% if user.is_authenticated %}
-		<p><a href="/logout/">Logout</a></p>
-		<p><a href="/profile/">Profile</a></p>
+		<a href="/profile/">Profile</a><br>
+		<a href="/logout/">Logout</a>
 		{% else %}
 		<a href="/signup/">Sign Up</a><br>
-		<p><a href="/login/">Login</a></p>
+		<a href="/login/">Login</a>
 		{% endif %}
         </div> 
         {% endblock %}

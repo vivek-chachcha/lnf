@@ -17,26 +17,8 @@ Found Posts
 		<title>Found Posts</title>
     </head>
 <body>
-   <div id="changeview">LIST VIEW | <a href="/foundposts/map?{{request.get_full_path|slice:'17:'}}">MAP VIEW</a></div>
-   <div id="sorttable">SORT BY: 
-        <form action="" method="GET" style="display:inline">
-            {% if '-' in request.get_full_path %}
-                <input type="submit" value="NAME" name="sort+">
-                <input type="submit" value="DATE" name="sort+">
-                <input type="submit" value="COLOUR" name="sort+">
-                <input type="submit" value="BREED" name="sort+">
-                <input type="submit" value="SEX" name="sort+">
-            {% else %}
-                <input type="submit" value="NAME" name="sort-">
-                <input type="submit" value="DATE" name="sort-">
-                <input type="submit" value="COLOUR" name="sort-">
-                <input type="submit" value="BREED" name="sort-">
-                <input type="submit" value="SEX" name="sort-">
-            {% endif %}
-            <input type="hidden" name="list" value="{{found_post_list}}">
-        </form>
-    </div><br>
-    <div id="filtertable">FILTER BY: 
+   <div id="changeview" style="font-size: 23px">LIST VIEW | <a href="/foundposts/map?{{request.get_full_path|slice:'17:'}}">MAP VIEW</a></div>
+   <div id="filtertable"><b>FILTER BY: </b>
         <form action="" method="GET" style="display:inline">
             NAME: <input type="text" name="name">
             <div tooltip="Enter a start and end range, or enter a specific date in the first box" style="display:inline">DATE: <input type="date" name="date1">
@@ -56,6 +38,24 @@ Found Posts
             <input type="submit" value="Reset Search" name="reset">
         </form>
     </div><br>
+    <div id="sorttable"><b>SORT BY: </b>
+        <form action="" method="GET" style="display:inline">
+            {% if '-' in request.get_full_path %}
+                <input type="submit" value="NAME" name="sort+">
+                <input type="submit" value="DATE" name="sort+">
+                <input type="submit" value="COLOUR" name="sort+">
+                <input type="submit" value="BREED" name="sort+">
+                <input type="submit" value="SEX" name="sort+">
+            {% else %}
+                <input type="submit" value="NAME" name="sort-">
+                <input type="submit" value="DATE" name="sort-">
+                <input type="submit" value="COLOUR" name="sort-">
+                <input type="submit" value="BREED" name="sort-">
+                <input type="submit" value="SEX" name="sort-">
+            {% endif %}
+            <input type="hidden" name="list" value="{{found_post_list}}">
+        </form>
+    </div><br>
 	<div id="posttablelist" style="display:block">
 		<div id="list">
 		{% if found_post_list %}
@@ -63,7 +63,7 @@ Found Posts
 			<div class="row">				
 				<div class="entry" style="float: left; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
 				<div class="entry"><b>Name:</b> {{ post.name }}</div>
-				<div class="entry"><b>Date {{ post.get_state_display }}: </b> {{post.date}} </div>
+				<div class="entry"><b>Date {{ post.get_state_display }}: </b> {{ post.date }} </div>
 				<div class="entry"><b>Color:</b> {{ post.colour }}</div>
 				<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
 				<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>
