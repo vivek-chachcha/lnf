@@ -201,8 +201,8 @@ def posts(request):
         else:
             return render(request, 'posts/lostpostslist.html', context)
 
-def HomeView(request):
+def home(request):
     return render(request, 'home.html')
         
-def AboutView(request):
+def about(request):
     return render(request, 'about.html')
