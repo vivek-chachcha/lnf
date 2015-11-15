@@ -14,6 +14,7 @@ Including another URLconf
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import url
+from django.views.generic import TemplateView
 from . import views
 
 
@@ -32,5 +33,6 @@ urlpatterns = [
     url(r'^foundposts/map$', views.posts, name='foundpostsmap'),
     url(r'^$', views.HomeView, name='home'),
     url(r'^about/$', views.AboutView, name='about'),
-    url(r'^admin/import', views.importData, name='import'),
+    url(r'^admin/import', views.importData, name='importdata'),
+    url(r'^admin/startimport', views.importDataStart, name='importdatastart'),
 ]

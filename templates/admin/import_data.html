@@ -1,0 +1,30 @@
+{% extends "admin/index.html" %}
+{% load i18n admin_static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />{% endblock %}
+
+{% block extrahead %}
+<script>
+    function start() {
+        document.getElementById("import-button").style.display="none";
+        document.getElementById("import-start").style.display="block";
+    }
+</script>
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+<button onclick="start()" id="import-button" style="display:block"><a href="/admin/startimport">Start Import</a></button>
+<div id="import-start" style="display:none">Importing data... <br>Page will redirect back to the admin home page when the import is completed.</div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
