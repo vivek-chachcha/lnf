@@ -9,7 +9,8 @@
 {% block content %}
 
 <hr> 
-<h3> Post written by: {{ post.author}} on <h4>{{ post.date_created }}</h4></h3>
+<h3> Post written by: {{ post.author}}</h3>
+<h4>{{ post.date_created }}</h4>
 <style>
 </style>
         <img src="{{post.image_url}}" height="200" width="200">
@@ -23,7 +24,7 @@
         <p>
         <hr>
         <p>
-<div style="background-color:#9999CC; color:#800000; padding:20px; border-top-left-radius: 25px; border-top-right-radius: 25px;">
+<div style="background-color:#9999CC; color:#800000; padding:25px; border-top-left-radius: 25px; border-top-right-radius: 25px;">
 <h3>COMMENT SECTION</h3>
 </div>
 <div style="background-color:#E6E6FA; color:#800000; padding:20px; border-bottom-right-radius: 25px;border-bottom-left-radius: 25px ">
@@ -54,7 +55,7 @@
     <input type="submit" name="submit" value="Submit" />
 </form>
 {% else %}
-Please login to add comments.
+<h2>Please login to add comments.</h2>
 {% endif %}
 </div>
 {% endblock %}

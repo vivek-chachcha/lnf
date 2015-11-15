@@ -128,7 +128,7 @@ def createpost(request):
     
 def post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    if request.user.is_authenticated():
+    """if request.user.is_authenticated():
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
@@ -137,7 +137,22 @@ def post(request, post_id):
             comment.save()
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         return render(request, 'detail.html', {'post': post, 'form': form,})
-    return render(request, 'detail.html', {'post': post})
+    return render(request, 'detail.html', {'post': post})"""
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user.get_full_name()
+            comment.save()
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        else:
+            return render_to_response('detail.html', {'post':post,'form': form}, context_instance=RequestContext(request))
+    else:
+        # user has not signed up yet, show a form. 
+        form = CommentForm()
+        context = {'post':post, 'form': form}
+        return render_to_response('detail.html', context, context_instance=RequestContext(request))
     
 def error(request):
     return render(request, 'error.html')
