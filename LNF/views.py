@@ -14,19 +14,20 @@ import urllib.request
 from urllib.request import urlopen
 
 def importData(request):
-    url = "ftp://webftp.vancouver.ca/OpenData/json/LostAnimals.json"
-    data = urlopen(url).read().decode('utf-8')
-    data = json.loads(data)
+    if request.user.is_superuser:
+        url = "ftp://webftp.vancouver.ca/OpenData/json/LostAnimals.json"
+        data = urlopen(url).read().decode('utf-8')
+        data = json.loads(data)
 
-    for entry in data:
-        m = Post(date = entry['Date'], colour = entry['Color'], breed = entry['Breed'], name = entry['Name'], date_created = entry[
-'DateCreated'])
-        m.sex = entry['Sex'] if entry['Sex'] else 'X'
-        m.state = 0 if entry['State'] == 'Lost' else 1
-        m.save()
+        for entry in data:
+            m = Post(date = entry['Date'], colour = entry['Color'], breed = entry['Breed'], name = entry['Name'], date_created = entry['DateCreated'])
+            m.sex = entry['Sex'] if entry['Sex'] else 'X'
+            m.state = 0 if entry['State'] == 'Lost' else 1
+            m.save()
 
-    return HttpResponseRedirect('/profile/')
-
+        return HttpResponseRedirect('/admin/')
+    else:
+        return HttpResponseRedirect('/admin/')
 
 def signUpUser(request):
     if request.user.is_authenticated():

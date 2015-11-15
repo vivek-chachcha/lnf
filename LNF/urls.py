@@ -32,5 +32,5 @@ urlpatterns = [
     url(r'^foundposts/map$', views.posts, name='foundpostsmap'),
     url(r'^$', views.HomeView, name='home'),
     url(r'^about/$', views.AboutView, name='about'),
-    url(r'^import/$', views.importData, name='import'),
+    url(r'^admin/import', views.importData, name='import'),
 ]
