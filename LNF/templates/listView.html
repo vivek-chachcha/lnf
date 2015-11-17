@@ -12,7 +12,7 @@ Posts
 
     {% for post in all_post_list %}
         <hr>
-        <img src="{{post.image_url}}" height="50" width="50">
+        <img src="{{post.picture}}" height="50" width="50">
         <p> Name: {{ post.name}} 
         <p> State: {{post.get_state_display}}
         <p> Date & Time {{post.get_state_display}}: {{ post.date}}

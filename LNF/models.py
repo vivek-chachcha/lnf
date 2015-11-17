@@ -29,7 +29,7 @@ class Post(models.Model):
     )
     sex = models.CharField(max_length=3, choices=PET_SEX_CHOICES, default='M')
 
-    picture = models.ImageField(upload_to='posts', null=True, blank=True)
+    picture = models.CharField(max_length=50, null=True, blank=True)
     PET_STATE_CHOICES = (
     ('0', 'Lost'),
     ('1', 'Found'),
@@ -40,11 +40,6 @@ class Post(models.Model):
         self.date_created = timezone.now()
         self.modified_date = timezone.now()
         super(Post,self).save(self, *args, **kwargs)
-    def image_url(self):
-        if self.picture and hasattr(self.picture, 'url'):
-            return self.picture.url
-        else:
-            return os.path.join(settings.MEDIA_URL, 'paw.png')
     def description_text(self):
         if self.description:
             return self.description

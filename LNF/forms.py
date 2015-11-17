@@ -48,4 +48,5 @@ class PostForm(forms.ModelForm):
             'colour': TextInput(attrs={'size': 25}), 
             'breed': TextInput(attrs={'size': 25}),
             'description': Textarea(attrs={'cols': 27, 'rows': 10}),
+	    'picture': forms.HiddenInput(attrs={'id': 'post_pic'}),
         }

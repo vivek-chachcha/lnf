@@ -31,4 +31,5 @@ urlpatterns = [
     url(r'^$', views.HomeView, name='home'),
     url(r'^about/$', views.AboutView, name='about'),
     url(r'^import/$', views.importData, name='import'),
+    url(r'^sign_s3/$', views.sign_s3, name='sign_s3'),
 ]
