@@ -9,6 +9,7 @@ import json
 import urllib.parse
 import urllib.request
 from urllib.request import urlopen
+from django.core.exceptions import ValidationError
 
 class Post(models.Model):
     lat = models.FloatField(null=True)
@@ -20,7 +21,11 @@ class Post(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     
     date_created = models.DateTimeField('date posted', null=True)
-    date = models.DateField('date lost/found', null=True)
+    def valid_date(value):
+        if datetime.date.today() < value:
+            raise ValidationError('Date is not valid.')    
+    
+    date = models.DateField('date lost/found', null=True, validators=[valid_date])
     modified_date = models.DateTimeField('date last modified')
 
     PET_SEX_CHOICES = (
@@ -52,7 +57,6 @@ class Post(models.Model):
             self.lon = float(data['results'][0]['geometry']['location']['lng'])
         
         super(Post,self).save(self, *args, **kwargs)
-
 
     def image_url(self):
         if self.picture and hasattr(self.picture, 'url'):

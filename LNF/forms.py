@@ -53,7 +53,7 @@ class PostForm(forms.ModelForm):
         if not ((49.261226-1 <= float(data['results'][0]['geometry']['location']['lat']) <= 49.261226+1) | (-123.1139268-1 <= float(data['results'][0]['geometry']['location']['lng']) <= -123.1139268+1)):
             raise ValidationError('Address is not valid.')    
             
-    address = forms.CharField(label=(u'Address'), required=False, validators=[valid_address], widget=TextInput(attrs={'size': 25}))    
+    address = forms.CharField(label=(u'Address'), required=False, validators=[valid_address], widget=TextInput(attrs={'size': 25}))            
     class Meta:
         model = Post
         fields = ('name', 'state', 'date', 'colour', 'breed', 'sex', 'description', 'picture')
