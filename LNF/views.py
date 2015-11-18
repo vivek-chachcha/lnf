@@ -12,6 +12,7 @@ import json
 import urllib.parse
 import urllib.request
 from urllib.request import urlopen
+from datetime import datetime
 
 def importData(request):
     if request.user.is_superuser:
@@ -25,11 +26,18 @@ def importDataStart(request):
     data = json.loads(data)
 
     for entry in data:
-        m = Post(date = entry['Date'], colour = entry['Color'], breed = entry['Breed'], name = entry['Name'], date_created = entry['DateCreated'])
-        m.sex = entry['Sex'] if entry['Sex'] else 'X'
-        m.state = 0 if entry['State'] == 'Lost' else 1
-        m.save()
-
+        date_entry = entry['Date']
+        dateparsed = datetime.strptime(date_entry, "%Y-%m-%d").date()
+        if (dateparsed.year > 2010):
+            color_entry = entry['Color']
+            breed_entry = entry['Breed']
+            name_entry = entry['Name']
+            if (not Post.objects.filter(date = date_entry, colour = color_entry, breed = breed_entry, name = name_entry).exists()):
+                m = Post(date = date_entry, colour = color_entry, breed = breed_entry, name = name_entry, date_created = entry['DateCreated'])
+                m.sex = entry['Sex'] if entry['Sex'] else 'X'
+                m.state = 0 if entry['State'] == 'Lost' else 1
+                m.save()                
+    
     return HttpResponseRedirect('/admin/')
 
 def signUpUser(request):
@@ -132,8 +140,17 @@ def error(request):
     return render(request, 'error.html')
 
 def posts(request):
-    # default all post list
-    all_post_list = Post.objects.order_by('-date_created')[:]
+    # default criteria
+    name_crit = request.GET.get('default_name')
+    date_start = request.GET.get('default_date1')
+    if (date_start == None):
+        date_start = '9999-12-31'
+    date_end = request.GET.get('default_date2')
+    if (date_end == None):
+        date_end = '9999-12-31'
+    colour_crit = request.GET.get('default_color')
+    breed_crit = request.GET.get('default_breed')
+    sex_crit = request.GET.get('default_sex')
     
     # reset all post list if request is to reset filters
     if (request.GET.get('reset')):
@@ -142,51 +159,45 @@ def posts(request):
     # handle filter functionality
     if (request.GET.get('filter')):
         name_crit = request.GET.get('name')
-        if (name_crit != ""):
-            all_post_list = all_post_list.filter(name__icontains=name_crit)
-
         date_start = request.GET.get('date1')
         date_end = request.GET.get('date2')
-        if (date_start != ""):
-            if (date_end != ""):
-                all_post_list = all_post_list.filter(date__range=[date_start, date_end])
-            else:
-                all_post_list = all_post_list.filter(date=date_start)
-
         colour_crit = request.GET.get('colour')
-        if (colour_crit != ""):
-            all_post_list = all_post_list.filter(colour__icontains=colour_crit)
-        
         breed_crit = request.GET.get('breed')
-        if (breed_crit != ""):
-            all_post_list = all_post_list.filter(breed__icontains=breed_crit)
-
         sex_crit = request.GET.get('sex')
-        if (sex_crit != ""):
-            all_post_list = all_post_list.filter(sex=sex_crit)
+        
+    # default all post list
+    all_post_list = Post.objects.order_by('-date_created')[:]
     
+    if (name_crit != "" and name_crit != None):
+        all_post_list = all_post_list.filter(name__icontains=name_crit)
+    if (date_start != "" and date_start != '9999-12-31'):
+        if (date_end != "" and date_end != '9999-12-31'):
+            all_post_list = all_post_list.filter(date__range=[date_start, date_end])
+        else:
+            all_post_list = all_post_list.filter(date=date_start)
+    if (colour_crit != "" and colour_crit != None):
+        all_post_list = all_post_list.filter(colour__icontains=colour_crit)
+    if (breed_crit != "" and breed_crit != None):
+        all_post_list = all_post_list.filter(breed__icontains=breed_crit)
+    if (sex_crit != "" and sex_crit != None):
+        all_post_list = all_post_list.filter(sex=sex_crit)
+        
     # handle sorting functionality based on current filtered set of posts
     if (request.GET.get('sort-')):
         sort_criteria = request.GET.get('sort-').lower()
-        current_posts = request.GET.get('list')
-        split_posts = current_posts.split(",")
-        ids = [post[8:9] for post in split_posts]
-        ids_int = [int(id) for id in ids]
-        filtered_posts = Post.objects.filter(pk__in=ids)
-        all_post_list = filtered_posts.order_by(sort_criteria)
+        if (all_post_list.count() == 0):
+            all_post_list = Post.objects.order_by('-date_created')[:]
+        all_post_list = all_post_list.order_by(sort_criteria)
     elif (request.GET.get('sort+')):
         sort_criteria = request.GET.get('sort+').lower()
-        current_posts = request.GET.get('list')
-        split_posts = current_posts.split(",")
-        ids = [post[8:9] for post in split_posts]
-        ids_int = [int(id) for id in ids]
-        filtered_posts = Post.objects.filter(pk__in=ids)
-        all_post_list = filtered_posts.order_by("-" + sort_criteria)
+        if (all_post_list.count() == 0):
+            all_post_list = Post.objects.order_by('-date_created')[:]
+        all_post_list = all_post_list.order_by("-" + sort_criteria)
 
     # filter one more time based on lost/found state and return correct html page
     if 'found' in request.get_full_path():
         found_post_list = all_post_list.filter(state=1)
-        context = {'found_post_list': found_post_list}
+        context = {'found_post_list': found_post_list, 'name_crit': name_crit, 'date_start': date_start, 'date_end': date_end, 'colour_crit': colour_crit, 'breed_crit': breed_crit, 'sex_crit': sex_crit}
 
         if 'map' in request.get_full_path():
             return render(request, 'posts/foundpostsmap.html', context)
@@ -194,7 +205,7 @@ def posts(request):
             return render(request, 'posts/foundpostslist.html', context)
     else:
         lost_post_list = all_post_list.filter(state=0)
-        context = {'lost_post_list': lost_post_list}
+        context = {'lost_post_list': lost_post_list, 'name_crit': name_crit, 'date_start': date_start, 'date_end': date_end, 'colour_crit': colour_crit, 'breed_crit': breed_crit, 'sex_crit': sex_crit}
 
         if 'map' in request.get_full_path():
             return render(request, 'posts/lostpostsmap.html', context)
