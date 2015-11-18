@@ -66,7 +66,7 @@ class Post(models.Model):
         if self.description:
             return self.description
         else:
-            return "No description is available this pet."
+            return "No description is available for this pet."
 
     def __str__(self):              # __unicode__ on Python 2
         return str(self.id)

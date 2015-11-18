@@ -2,7 +2,7 @@ body, head {
     text-align: center;
 }
 #listview:hover,#mapview:hover {
-	background-color: #3385A5;
+	background-color: #B7B1A3;
 }
 #changeview {
     margin-top: 25px;
@@ -23,7 +23,7 @@ body, head {
     text-align: left;
     width: 40%;
     height: 570px;
-    background-color: #CCC;
+    background-color: #B7B1A3;
     display: inline-block;
     padding-top: 15px;
     padding-right: 15px;
@@ -34,7 +34,7 @@ body, head {
 #list {
     text-align: left;
     width: 90%;
-    background-color: #CCC;
+    background-color: #B7B1A3;
     display: inline-block;
     padding-top: 15px;
     padding-right: 15px;
@@ -46,10 +46,10 @@ body, head {
     padding-bottom: 15px;
     padding-right: 15px;
     padding-left: 15px;
-	background-color: #DDD;
+	background-color: #ccc7bd;
 }
 .row:hover{
-    background-color: #CBEBF7;
+    background-color: #dddbd4;
 }
 [tooltip]:before {
     position: absolute;

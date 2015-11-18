@@ -11,7 +11,7 @@ New Post
 <html>
   <head>
   <style>
- label { display: inline-block; width: 140px; text-align: right; }​
+ label { display: inline-block; width: 140px; text-align: right; font-weight: bold;}​
 
 </style>
   </head>
@@ -19,8 +19,8 @@ New Post
   <form enctype="multipart/form-data" action="" method="post">
   {% csrf_token %}
     {{ form.as_p }}
-
-	<input type="submit" value="OK">
+    <br>
+	<p style="text-indent: 80px"><input type="submit" value="Submit"></p>
   </form>
     </body>
 </html>

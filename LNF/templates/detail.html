@@ -9,27 +9,30 @@
 
 {% block content %}
 
-<hr>
-Date posted: {{ post.date_created }}
-<p>
-<div class="share">Share Post: {% post_to_facebook "{{post.id}}/post" "______" %}</div>
+<div style="float: right; text-align: right;">
+    <b>Date posted:</b> {{ post.date_created }}<br><br>
+    <img src="{{post.image_url}}" height="200" width="200"><br><br>
+    
+    <div class="share"><b>Share Post:</b> {% post_to_facebook "{{post.id}}/post" "______" %}</div>
 
- <form enctype="multipart/form-data" action="" method="post">
-  {% csrf_token %}
-    {{ form }}
-	<input type="submit" value="OK">
-  </form>
-        <img src="{{post.image_url}}" height="200" width="200">
-        <p> Name: {{ post.name}} 
-        <p> State: {{post.get_state_display}}
-        <p> Date {{post.get_state_display}}: {{ post.date}}
-        <p> Breed: {{ post.breed}}
-        <p> Colour: {{ post.colour}}
-        <p> Sex: {{ post.get_sex_display}}
-        <p> Description: {{ post.description_text }} 
-        <p>
-        <hr>
-        <p>
+    <form enctype="multipart/form-data" action="" method="post">
+    {% csrf_token %}
+        {{ form }}
+    <input type="submit" value="OK">
+    </form>
+</div>
+<div style="font-size: 19px">
+    <p><b>Name:</b> {{ post.name}} </p>
+    <p><b>State:</b> {{post.get_state_display}} </p>
+    <p><b>Date {{post.get_state_display}}:</b> {{ post.date}} </p>
+    <p><b>Breed:</b> {{ post.breed}} </p>
+    <p><b>Colour:</b> {{ post.colour}} </p>
+    <p><b>Sex:</b> {{ post.get_sex_display}} </p>
+    <p><b>Description:</b> {{ post.description_text }} </p>
+</div>
+    <br/>
+    <hr/>
+    <br/>
 
 COMMENT SECTION
 
@@ -46,6 +49,6 @@ COMMENT SECTION
     .facebook-this a {
         color:rgba(0,0,0,0.0);
     }
-    }
+    label {font-weight: bold;}​
 </style>
 {% endblock %}

@@ -2,45 +2,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{% static 'basestyle.css' %}" />
     <title>{% block title %}Animal Lost 'N Found{% endblock %}</title>
 </head>
 
 <body>
 	<div id="fullbody">
-    <div id="sidebar">
-		<center><b>NAVIGATION</b><br><br>
-        <a href="/">Home</a><br>
-        <a href="/about/">About</a><br><hr>
-        <a href="/lostposts/list">Lost Pets</a><br>
-        <a href="/foundposts/list">Found Pets</a><br><hr>
-        <a href="/createpost/">Create Post</a><br><hr>
-        {% block sidebar %}
-		<div id="nav_top_right">
+    <div id="topbar">
+        <div id="logo">
+        <b><font size="6pt">ANIMAL LOST 'N FOUND</font></b><br>
+        <i>a service for finding lost animals</i>
+        </div>
+        <div id="navigation">
+        <div id="nav_top_right">
         {% if user.is_authenticated %}
-		<a href="/profile/">Profile</a><br>
-		<a href="/logout/">Logout</a>
+		<a href="/profile/">Profile</a> | 
+		<a href="/logout/"><b>Logout</b></a>
 		{% else %}
-		<a href="/signup/">Sign Up</a><br>
-		<a href="/login/">Login</a>
+		<a href="/signup/">Sign Up</a> |
+		<a href="/login/"><b>Login</b></a>
 		{% endif %}
         </div> 
+        <a href="/">Home</a> | 
+        <a href="/about/">About</a> | 
+        <a href="/lostposts/list">Lost Pets</a> | 
+        <a href="/foundposts/list">Found Pets</a> | 
+        <a href="/createpost/">Create Post</a>
+        {% block sidebar %}
         {% endblock %}
-		</center>
+        </div>
     </div>
-	<div id="rcol">
 	<div id="header">
-        <h1>
-        {% block header %}
+        <b>{% block header %}
 		Animal Lost 'N Found
         {% endblock %}
-		</h1>
+        </b>
     </div>
 
     <div id="content">
         {% block content %}  {% endblock %}
     </div>
-	</div>
 	</div>
 </body>
 </html>

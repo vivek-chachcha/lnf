@@ -3,13 +3,13 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block header %}
-<p><font size="6"; color=#ADD8E6><b>Sign Up</b></font></p>
+Sign Up
 {% endblock %}
 
 {% block content %}
 <form action="" method="post">
 {% csrf_token %}
-<p><font size="5"; color=#2A1500><b>Sign up with Vancouver Animal Lost 'N Found!</b></font></p>
+<p><font size="5"><b>Sign up with Vancouver Animal Lost 'N Found!</b></font></p>
 {% if form.errors %}<p>Please correct the following fields:</p>{% endif %}
 <div style="border-radius: 30px 30px 30px 30px; background-color:fbf5d5; color:#303030; padding:20px;">
 <div class="signup_div"> 
@@ -42,6 +42,8 @@
         <p><label for="password2"{% if form.password2.errors %} class="error"{% endif %}>Verify Password:</label></p>
         <p>{{ form.password2 }}</p>
 </div>
+<br>
+<b>Terms and Conditions: </b><br>
 <p>- I am an animal lover.</p>
 <p>- I will respect other users.</p>
 <p>- I will not use the website for improper purposes.</p>
