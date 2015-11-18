@@ -82,7 +82,7 @@ Found Posts
     </div><br>
     <div id="sorttable"><b>SORT BY: </b>
         <form action="" method="GET" style="display:inline">
-            {% if '-' in request.get_full_path %}
+            {% if '-=' in request.get_full_path %}
                 <input type="submit" value="NAME" name="sort+">
                 <input type="submit" value="DATE" name="sort+">
                 <input type="submit" value="COLOUR" name="sort+">
@@ -95,7 +95,12 @@ Found Posts
                 <input type="submit" value="BREED" name="sort-">
                 <input type="submit" value="SEX" name="sort-">
             {% endif %}
-            <input type="hidden" name="list" value="{{found_post_list}}">
+            <input type="hidden" name="default_name" value="{{ name_crit }}">
+            <input type="hidden" name="default_date1" value="{{ date_start }}">
+            <input type="hidden" name="default_date2" value="{{ date_end }}">
+            <input type="hidden" name="default_color" value="{{ colour_crit }}">
+            <input type="hidden" name="default_breed" value="{{ breed_crit }}">
+            <input type="hidden" name="default_sex" value="{{ sex_crit }}">
         </form>
     </div><br>
 	<div id="posttablemap" style="display:block">

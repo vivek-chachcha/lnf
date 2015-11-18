@@ -67,9 +67,6 @@ class Post(models.Model):
 
     def __str__(self):              # __unicode__ on Python 2
         return str(self.id)
-
-    class Meta:
-        unique_together = ["name", "breed", "colour", "description", "sex", "state", "date"]
         
 class BookmarkedPost(models.Model):
     post = models.ForeignKey(Post)
