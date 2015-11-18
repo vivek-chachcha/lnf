@@ -56,44 +56,49 @@ Found Posts
 				map.setZoom(14);
 				map.setCenter(focusedmarker.getPosition());
 			};
-
-			function swapview(view) {
-				if (view === "listview") {
-					document.getElementById('posttablelist').style.display = 'block';
-					document.getElementById('posttablemap').style.display = 'none';
-				} else {
-					document.getElementById('posttablemap').style.display = 'block';
-					document.getElementById('posttablelist').style.display = 'none';
-					google.maps.event.trigger(map, 'resize');
-					map.setCenter(mapCenter);
-					map.setZoom(11);
-				}
-			}
     </script>
 </head>
 <body>
-	<div id="changeview"><span id="listview" onclick="swapview('listview')">LIST VIEW</span> | <span id="mapview" onclick="swapview('mapview')">MAP VIEW</span></div>
-	<div id="posttablelist" style="display:block">
-		<div id="list">
-		{% if found_post_list %}
-			{% for post in found_post_list %}
-			<div class="row">				
-				<div class="entry" style="float: left; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
-				<div class="entry"><b>Name:</b> {{ post.name }}</div>
-				<div class="entry"><b>Date {{ post.get_state_display }}: </b> {{post.date}} </div>
-				<div class="entry"><b>Color:</b> {{ post.colour }}</div>
-				<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
-				<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>
-				<div class="entry"><a href="/{{ post.id }}/post">More Details</a></div>
-				<div class="entry" style="text-align: right"><i><b>Last Updated: </b> {{ post.modified_date }}</i></div>
-			</div><br>
-			{% endfor %}
-		{% else %}
-		<center> There are no available posts</center>
-		{% endif %}
-		</div>
-	</div>
-	<div id="posttablemap" style="display:none">
+    <div id="changeview" style="font-size: 23px"><a href="/foundposts/list?{{request.get_full_path|slice:'16:'}}">LIST VIEW</a> | MAP VIEW</div>
+    <div id="filtertable"><b>FILTER BY: </b>
+        <form action="" method="GET" style="display:inline">
+            NAME: <input type="text" name="name">
+            <div tooltip="Enter a start and end range, or enter a specific date in the first box" style="display:inline">DATE: <input type="date" name="date1">
+            <input type="date" name="date2"></div>
+            COLOUR: <input type="text" name="colour">
+            BREED: <input type="text" name="breed">
+            SEX:
+            <select name="sex">
+            <option value=""></option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <option value="M/N">Male Neutered</option>
+            <option value="F/S" name="sex">Female Spayed</option>
+            <option value="X" name="sex">Unknown</option>
+            </select>
+            <input type="submit" value="Submit" name="filter">
+            <input type="submit" value="Reset Search" name="reset">
+        </form>
+    </div><br>
+    <div id="sorttable"><b>SORT BY: </b>
+        <form action="" method="GET" style="display:inline">
+            {% if '-' in request.get_full_path %}
+                <input type="submit" value="NAME" name="sort+">
+                <input type="submit" value="DATE" name="sort+">
+                <input type="submit" value="COLOUR" name="sort+">
+                <input type="submit" value="BREED" name="sort+">
+                <input type="submit" value="SEX" name="sort+">
+            {% else %}
+                <input type="submit" value="NAME" name="sort-">
+                <input type="submit" value="DATE" name="sort-">
+                <input type="submit" value="COLOUR" name="sort-">
+                <input type="submit" value="BREED" name="sort-">
+                <input type="submit" value="SEX" name="sort-">
+            {% endif %}
+            <input type="hidden" name="list" value="{{found_post_list}}">
+        </form>
+    </div><br>
+	<div id="posttablemap" style="display:block">
 		<div id="map"></div>
 		<div id="listtable">
 			<center><h3>All Animals With Locations</h3></center>
@@ -104,7 +109,7 @@ Found Posts
 					<div class="row" onclick="focusOnMap({{post.id}})">
 						<div class="entry" style="float: right; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
 						<div class="entry"><b>Name:</b> {{ post.name }}</div>
-				        <div class="entry"><b>Date {{ post.get_state_display }}: </b> {{post.date}} </div>
+				        <div class="entry"><b>Date {{ post.get_state_display }}: </b> {{ post.date }} </div>
 						<div class="entry"><b>Color:</b> {{ post.colour }}</div>
 						<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
 						<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>

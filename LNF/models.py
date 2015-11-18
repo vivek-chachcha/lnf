@@ -66,7 +66,7 @@ class Post(models.Model):
             return "No description is available this pet."
 
     def __str__(self):              # __unicode__ on Python 2
-        return self.name
+        return str(self.id)
 
     class Meta:
         unique_together = ["name", "breed", "colour", "description", "sex", "state", "date"]

@@ -35,7 +35,7 @@ a {
 	border-bottom-left-radius: 25px;
 	flex: 1;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
-	font-size: 20px;
+	font-size: 16px;
 	line-height: 150%;
 }
 #rcol {
@@ -66,5 +66,5 @@ a {
 	height: auto;
 	flex: 1;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
-	font-size: 14pt;
+	font-size: 15px;
 }

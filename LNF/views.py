@@ -13,7 +13,6 @@ import urllib.parse
 import urllib.request
 from urllib.request import urlopen
 
-
 def importData(request):
     url = "ftp://webftp.vancouver.ca/OpenData/json/LostAnimals.json"
     data = urlopen(url).read().decode('utf-8')
@@ -85,11 +84,6 @@ def getProfile(request):
     context = {'lnf_user': lnf_user}
     return render_to_response('profile.html', context, context_instance=RequestContext(request))
 
-        
-def posts(request):
-    all_post_list = Post.objects.order_by('-date_created')[:]
-    context = {'all_post_list': all_post_list}
-    return render(request, 'listView.html', context)
     
 def createpost(request):
     if not request.user.is_authenticated():
@@ -135,17 +129,75 @@ def post(request, post_id):
 def error(request):
     return render(request, 'error.html')
 
-def LostPostView(request):
+def posts(request):
+    # default all post list
     all_post_list = Post.objects.order_by('-date_created')[:]
-    lost_post_list = all_post_list.filter(state=0)
-    context = {'lost_post_list': lost_post_list}
-    return render(request, 'posts/lostposts.html', context)
+    
+    # reset all post list if request is to reset filters
+    if (request.GET.get('reset')):
+        all_post_list = Post.objects.order_by('-date_created')[:]
         
-def FoundPostView(request):
-    all_post_list = Post.objects.order_by('-date_created')[:]
-    found_post_list = all_post_list.filter(state=1)
-    context = {'found_post_list': found_post_list}
-    return render(request, 'posts/foundposts.html', context)
+    # handle filter functionality
+    if (request.GET.get('filter')):
+        name_crit = request.GET.get('name')
+        if (name_crit != ""):
+            all_post_list = all_post_list.filter(name__icontains=name_crit)
+
+        date_start = request.GET.get('date1')
+        date_end = request.GET.get('date2')
+        if (date_start != ""):
+            if (date_end != ""):
+                all_post_list = all_post_list.filter(date__range=[date_start, date_end])
+            else:
+                all_post_list = all_post_list.filter(date=date_start)
+
+        colour_crit = request.GET.get('colour')
+        if (colour_crit != ""):
+            all_post_list = all_post_list.filter(colour__icontains=colour_crit)
+        
+        breed_crit = request.GET.get('breed')
+        if (breed_crit != ""):
+            all_post_list = all_post_list.filter(breed__icontains=breed_crit)
+
+        sex_crit = request.GET.get('sex')
+        if (sex_crit != ""):
+            all_post_list = all_post_list.filter(sex=sex_crit)
+    
+    # handle sorting functionality based on current filtered set of posts
+    if (request.GET.get('sort-')):
+        sort_criteria = request.GET.get('sort-').lower()
+        current_posts = request.GET.get('list')
+        split_posts = current_posts.split(",")
+        ids = [post[8:9] for post in split_posts]
+        ids_int = [int(id) for id in ids]
+        filtered_posts = Post.objects.filter(pk__in=ids)
+        all_post_list = filtered_posts.order_by(sort_criteria)
+    elif (request.GET.get('sort+')):
+        sort_criteria = request.GET.get('sort+').lower()
+        current_posts = request.GET.get('list')
+        split_posts = current_posts.split(",")
+        ids = [post[8:9] for post in split_posts]
+        ids_int = [int(id) for id in ids]
+        filtered_posts = Post.objects.filter(pk__in=ids)
+        all_post_list = filtered_posts.order_by("-" + sort_criteria)
+
+    # filter one more time based on lost/found state and return correct html page
+    if 'found' in request.get_full_path():
+        found_post_list = all_post_list.filter(state=1)
+        context = {'found_post_list': found_post_list}
+
+        if 'map' in request.get_full_path():
+            return render(request, 'posts/foundpostsmap.html', context)
+        else:
+            return render(request, 'posts/foundpostslist.html', context)
+    else:
+        lost_post_list = all_post_list.filter(state=0)
+        context = {'lost_post_list': lost_post_list}
+
+        if 'map' in request.get_full_path():
+            return render(request, 'posts/lostpostsmap.html', context)
+        else:
+            return render(request, 'posts/lostpostslist.html', context)
 
 def displayBookmarkedPosts(request):
     if not request.user.is_authenticated():
