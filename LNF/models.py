@@ -42,14 +42,17 @@ class Post(models.Model):
     def save(self, address_input, *args, **kwargs):
         self.date_created = timezone.now()
         self.modified_date = timezone.now()
-        
-        address = urllib.parse.quote_plus(address_input)
-        maps_api_url = "https://maps.google.com/maps/api/geocode/json?address=%s&key=%s" % (address,"AIzaSyAHjZ8463T8-5IvzglxU4TtWx3tMxsnxnc")
-        response = urllib.request.urlopen(maps_api_url)
-        data = json.loads(response.read().decode('utf8'))
+
         if address_input != '':
+            address = urllib.parse.quote_plus(address_input)
+            maps_api_url = "https://maps.google.com/maps/api/geocode/json?address=%s&key=%s" % (address,"AIzaSyAHjZ8463T8-5IvzglxU4TtWx3tMxsnxnc")
+            response = urllib.request.urlopen(maps_api_url)
+            data = json.loads(response.read().decode('utf8'))
             self.lat = float(data['results'][0]['geometry']['location']['lat'])
             self.lon = float(data['results'][0]['geometry']['location']['lng'])
+        else:
+            self.lat = None
+            self.lon = None
         
         super(Post,self).save(self, *args, **kwargs)
 

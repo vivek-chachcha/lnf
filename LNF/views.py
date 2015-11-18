@@ -36,7 +36,7 @@ def importDataStart(request):
                 m = Post(date = date_entry, colour = color_entry, breed = breed_entry, name = name_entry, date_created = entry['DateCreated'])
                 m.sex = entry['Sex'] if entry['Sex'] else 'X'
                 m.state = 0 if entry['State'] == 'Lost' else 1
-                m.save()                
+                m.save('')                
     
     return HttpResponseRedirect('/admin/')
 
