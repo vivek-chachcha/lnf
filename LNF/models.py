@@ -63,7 +63,7 @@ class Comment(models.Model):
     author = models.CharField(max_length=200, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_known_location = models.CharField(max_length=200, null=True, blank=True)
-    photo = models.ImageField(upload_to='comments', null=True, blank=True)
+    photo = models.ImageField(upload_to='posts', null=True, blank=True)
     text = models.TextField()
 
     def __unicode__(self):              

@@ -128,16 +128,6 @@ def createpost(request):
     
 def post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    """if request.user.is_authenticated():
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.author = request.user.get_full_name()
-            comment.save()
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        return render(request, 'detail.html', {'post': post, 'form': form,})
-    return render(request, 'detail.html', {'post': post})"""
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
