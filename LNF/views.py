@@ -24,7 +24,12 @@ def importDataStart(request):
     url = "ftp://webftp.vancouver.ca/OpenData/json/LostAnimals.json"
     data = urlopen(url).read().decode('utf-8')
     data = json.loads(data)
+    
+    parseData(data)
+    
+    return HttpResponseRedirect('/admin/')
 
+def parseData(data):
     for entry in data:
         date_entry = entry['Date']
         dateparsed = datetime.strptime(date_entry, "%Y-%m-%d").date()
@@ -36,10 +41,8 @@ def importDataStart(request):
                 m = Post(date = date_entry, colour = color_entry, breed = breed_entry, name = name_entry, date_created = entry['DateCreated'])
                 m.sex = entry['Sex'] if entry['Sex'] else 'X'
                 m.state = 0 if entry['State'] == 'Lost' else 1
-                m.save('')                
+                m.save('')   
     
-    return HttpResponseRedirect('/admin/')
-
 def signUpUser(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/profile/') #the user has already signed up, return to profile
