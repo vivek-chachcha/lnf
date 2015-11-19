@@ -1,0 +1,43 @@
+{% extends 'basesite.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Bookmarked Posts{% endblock %}
+
+{% block header %}
+Bookmarked Posts
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{%static 'posts/poststyle.css' %}" />
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Bookmarked Posts</title>
+    </head>
+<body>
+	<div id="posttablelist" style="display:block">
+		<div id="list">
+		{% if bm_post_list %}
+			{% for post in bm_post_list %}
+			<div class="row">				
+				<div class="entry" style="float: left; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
+				<div class="entry"><b>Name:</b> {{ post.name }}</div>
+				<div class="entry"><b>Date {{ post.get_state_display }}: </b> {{ post.date }} </div>
+				<div class="entry"><b>Color:</b> {{ post.colour }}</div>
+				<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
+				<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>
+				<div class="entry"><a href="/{{ post.id }}/post">More Details</a></div>
+				<div class="entry" style="text-align: right"><i><b>Last Updated: </b> {{ post.modified_date }}</i></div>
+			</div><br>
+			{% endfor %}
+		{% else %}
+		<center> There are no available posts</center>
+		{% endif %}
+		</div>
+	</div>
+  </body>
+</html>
+
+ {% endblock %}

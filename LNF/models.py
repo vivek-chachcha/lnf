@@ -20,7 +20,10 @@ class Post(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     
     date_created = models.DateTimeField('date posted', null=True)
-    date = models.DateField('date lost/found', null=True)
+    def valid_date(value):
+        if datetime.date.today() < value:
+            raise ValidationError('Date is not valid.')    
+    date = models.DateField('date lost/found', null=True, validators=[valid_date])
     modified_date = models.DateTimeField('date last modified')
 
     PET_SEX_CHOICES = (

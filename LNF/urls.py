@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^logout/$', views.logoutUser, name= 'Logout'),
     url(r'^error/$', views.error, name='error'),
     url(r'^createpost/$', views.createpost, name='createpost',),
+    url(r'^bmposts/$', views.displayBookmarkedPosts, name='bmposts'),
     url(r'^(?P<post_id>[0-9]+)/post/$', views.post, name='post'),
     url(r'^lostposts/list$', views.posts, name='lostpostslist'),
     url(r'^foundposts/list$', views.posts, name='foundpostslist'),
