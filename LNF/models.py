@@ -5,6 +5,7 @@ from django.core.files import File
 from django.conf import settings
 import os
 import datetime
+from PIL import Image
 
 
 class Post(models.Model):
@@ -66,11 +67,12 @@ class Comment(models.Model):
     photo = models.ImageField(upload_to='comments', null=True, blank=True)
     text = models.TextField()
 
-    def __unicode__(self):              
-        return self.text	
+    def __str__(self):              
+        return self.text
 
+    def save(self, *args, **kwargs):
+        super(Comment,self).save(self, *args, **kwargs)
+		
     def image_url(self):
         if self.photo and hasattr(self.photo, 'url'):
             return self.photo.url
-        else:
-            return os.path.join(settings.MEDIA_URL, 'paw.png')

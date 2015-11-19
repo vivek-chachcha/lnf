@@ -55,3 +55,5 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         exclude = ['post', 'author']
+        fields = ('last_known_location', 'photo', 'text')
+
