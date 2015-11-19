@@ -13,7 +13,7 @@
     <b>Date posted:</b> {{ post.date_created }}<br><br>
     <img src="{{post.image_url}}" height="200" width="200"><br><br>
     
-    <div class="share"><b>Share Post:</b> {% post_to_facebook "{{post.id}}/post" "______" %}</div>
+    <div class="share"><b>Share Post:</b> {% post_to_facebook "{{post.id}}/post" "_________" %}</div>
 
     <form enctype="multipart/form-data" action="" method="post">
     {% csrf_token %}
@@ -37,7 +37,7 @@
 COMMENT SECTION
 
 <style>
-    .share {
+        .share {
         display: inline-block;
     }
     .facebook-this {
@@ -46,8 +46,8 @@ COMMENT SECTION
         background-size: 100%;
         background-repeat: no-repeat;
     }
-    .facebook-this a {
-        color:rgba(0,0,0,0.0);
+    .facebook-this a {  
+        opacity: 0.0;
     }
     label {font-weight: bold;}​
 </style>

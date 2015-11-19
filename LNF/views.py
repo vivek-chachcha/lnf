@@ -221,9 +221,9 @@ def displayBookmarkedPosts(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/login/')
     bm_post_list = BookmarkedPostList.objects.get(user=request.user).bmList.all().order_by('-date_bmed')[:]
-    all_post_list = [bookmarkedpost.post for bookmarkedpost in bm_post_list]
-    context = {'title': 'Bookmarked Posts', 'all_post_list': all_post_list}
-    return render(request, 'listView.html', context)
+    bm_post_list = [bookmarkedpost.post for bookmarkedpost in bm_post_list]
+    context = {'bm_post_list': bm_post_list}
+    return render(request, 'posts/bmpostslist.html', context)
     
 def home(request):
     return render(request, 'home.html')
