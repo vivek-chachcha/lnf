@@ -38,7 +38,46 @@
     <hr/>
     <br/>
 
-COMMENT SECTION
+<div style="background-color:#9999CC; color:#800000; padding:25px; border-top-left-radius: 25px; border-top-right-radius: 25px;">
+<h3>COMMENT SECTION</h3>
+</div>
+<div style="background-color:#E6E6FA; color:#800000; padding:20px; border-bottom-right-radius: 25px;border-bottom-left-radius: 25px ">
+
+{% for comment in post.comments.all %}
+    <div class="comment">
+        <p><i><div class="date"; style="color:#996666;">comment written by {{ comment.author }}</div></i></p>
+		{% if comment.image_url%}
+		<p><b>Photo: </b> <img src="{{comment.image_url}}" height="200" width="200"></p>
+		{% else %}
+	    <p><b>Photo: </b> N/A </p>
+		{% endif %}
+		{% if comment.last_known_location %}
+		<p><b>Last known location: </b>{{ comment.last_known_location}}</p>
+		{% else %}
+		<p><b>Last known location: </b> N/A </p>	
+		{% endif %}		
+        <b>Comment: </b><p>{{ comment.text|linebreaks }}</p>
+		<p><i><div class="date"; style="color:#996666;">created on {{ comment.date_created }}</div></i></p>
+		<p>_____________________________________________________________</p>
+    </div>
+{% empty %}
+    <p>This post has no comments yet...</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+<h2>Add Comment</h2>
+
+<form enctype="multipart/form-data" action="" method="post">
+    {% csrf_token %}
+    <table>
+        {{ cform.as_table }}
+    </table>
+    <input type="submit" name="submit" value="Submit" />
+</form>
+{% else %}
+<h2>Please login to add comments.</h2>
+{% endif %}
+</div>
 
 <style>
         .share {
