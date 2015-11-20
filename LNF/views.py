@@ -5,8 +5,8 @@ from LNF.forms import UserCreateForm, LoginForm,BookmarkForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from .models import Post, BookmarkedPostList, BookmarkedPost
-from .forms import PostForm
+from .models import Post, Comment, BookmarkedPostList, BookmarkedPost
+from .forms import PostForm, CommentForm
 from PIL import Image
 import json
 import urllib.parse
@@ -107,6 +107,7 @@ def createpost(request):
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             new_post = form.save()
+            new_post.author = request.user.username
             return HttpResponseRedirect('/%d/post/' % new_post.id)
     else:
         form = PostForm()
@@ -119,7 +120,7 @@ def post(request, post_id):
     
         if not request.user.is_authenticated():
             return HttpResponseRedirect('/login/')
-            
+    
         form = BookmarkForm(request.POST)
         if form.is_valid():
             bml = BookmarkedPostList.objects.get(user=request.user)
@@ -134,11 +135,19 @@ def post(request, post_id):
                 newBmPost.save()
                 bml.bmList.add(newBmPost)
             
+        
+        cform = CommentForm(request.POST, request.FILES)
+        if cform.is_valid():
+            comment = cform.save(commit=False)
+            comment.post = post
+            comment.author = request.user.get_full_name()
+            comment.save()
             return HttpResponseRedirect('/%s/post/' % post_id)
     else:
         form = BookmarkForm()
-
-    return render(request, 'detail.html', {'post': post, 'form':form})
+        cform = CommentForm()
+    context = {'post':post, 'form': form, 'cform': cform}
+    return render_to_response('detail.html', context, context_instance=RequestContext(request))
 
 def edit(request, post_id):
     cur_post = get_object_or_404(Post, pk=post_id)
@@ -237,6 +246,12 @@ def displayBookmarkedPosts(request):
     bm_post_list = [bookmarkedpost.post for bookmarkedpost in bm_post_list]
     context = {'bm_post_list': bm_post_list}
     return render(request, 'posts/bmpostslist.html', context)
+
+def viewMyPost(request):
+    all_post_list = Post.objects.order_by('-date_created')[:]
+    my_post_list = all_post_list.filter(author = request.user.username)
+    context = {'my_post_list' : my_post_list}
+    return render(request, 'posts/mypost.html', context)
     
 def home(request):
     return render(request, 'home.html')

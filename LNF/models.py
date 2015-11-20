@@ -14,7 +14,8 @@ class Post(models.Model):
     lat = models.FloatField(null=True, default=None)
     lon = models.FloatField(null=True, default=None)
     address = models.CharField(max_length=50, null=True, default=None)
-    
+
+    author = models.CharField(max_length=200, null=True)	
     name = models.CharField(max_length=30, null=True)
     breed = models.CharField(max_length=30, null=True)
     colour = models.CharField(max_length=30, null=True)
@@ -81,9 +82,27 @@ class BookmarkedPost(models.Model):
     def save(self, *args, **kwargs):
         self.date_bmed = timezone.now()
         super(BookmarkedPost,self).save(self, *args, **kwargs)
-       
+      
 
 class BookmarkedPostList(models.Model):
     user = models.OneToOneField(User, editable=False)
     bmList = models.ManyToManyField(BookmarkedPost, blank=True)
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, related_name='comments')
+    author = models.CharField(max_length=200, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_known_location = models.CharField(max_length=200, null=True, blank=True)
+    photo = models.ImageField(upload_to='comments', null=True, blank=True)
+    text = models.TextField()
+
+    def __str__(self):              
+        return self.text
+
+    def save(self, *args, **kwargs):
+        super(Comment,self).save(self, *args, **kwargs)
+		
+    def image_url(self):
+        if self.photo and hasattr(self.photo, 'url'):
+            return self.photo.url
 

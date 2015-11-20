@@ -7,7 +7,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.files import File
 from django.conf import settings
-from .models import Post
+from .models import Post, Comment
 from django.core.exceptions import ValidationError
 import json
 import urllib.parse
@@ -68,4 +68,10 @@ class PostForm(forms.ModelForm):
             'description': Textarea(attrs={'cols': 27, 'rows': 10}),
 	    'address': TextInput(attrs={'size': 50}),
         }
+		
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = ['post', 'author']
+        fields = ('last_known_location', 'photo', 'text')
         
