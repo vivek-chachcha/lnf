@@ -56,7 +56,7 @@ class PostForm(forms.ModelForm):
     address = forms.CharField(label=(u'Address'), required=False, validators=[valid_address], widget=TextInput(attrs={'size': 25}))    
     class Meta:
         model = Post
-        fields = ('name', 'state', 'date', 'colour', 'breed', 'sex', 'description', 'picture')
+        fields = ('name', 'state', 'date', 'colour', 'breed', 'sex', 'description', 'picture', 'address')
         labels = {
             'date': 'Date (mm/dd/yy)'
                  }
@@ -66,5 +66,6 @@ class PostForm(forms.ModelForm):
             'colour': TextInput(attrs={'size': 25}), 
             'breed': TextInput(attrs={'size': 25}),
             'description': Textarea(attrs={'cols': 27, 'rows': 10}),
+	    'address': TextInput(attrs={'size': 50}),
         }
         

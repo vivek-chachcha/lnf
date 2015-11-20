@@ -103,8 +103,7 @@ def createpost(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            new_post = form.save(commit=False)
-            new_post.save(request.POST.get('address'))
+            new_post = form.save()
             return HttpResponseRedirect('/%d/post/' % new_post.id)
     else:
         form = PostForm()
@@ -137,7 +136,21 @@ def post(request, post_id):
         form = BookmarkForm()
 
     return render(request, 'detail.html', {'post': post, 'form':form})
-    
+
+def edit(request, post_id):
+    cur_post = get_object_or_404(Post, pk=post_id)
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/login/')
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=cur_post)
+        if form.is_valid():
+            cur_post = form.save()
+            return HttpResponseRedirect('/%d/post/' % cur_post.id)
+    else:
+        form = PostForm(instance=cur_post)
+							
+    return render(request, 'editPost.html', {'form': form})
+
 def error(request):
     return render(request, 'error.html')
 
