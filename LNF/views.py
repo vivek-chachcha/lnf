@@ -120,34 +120,35 @@ def post(request, post_id):
     
         if not request.user.is_authenticated():
             return HttpResponseRedirect('/login/')
-    
-        form = BookmarkForm(request.POST)
-        if form.is_valid():
-            bml = BookmarkedPostList.objects.get(user=request.user)
-            bmp = BookmarkedPost.objects.filter(bmList=bml,post=Post.objects.get(id=post_id))
-            if bmp.exists():
-                bmp = BookmarkedPost.objects.get(bmList=bml,post=Post.objects.get(id=post_id))
-                bml.bmList.remove(bmp)
-                bmp.delete()
-            isBookmarked = form.cleaned_data['bookmark']        
-            if isBookmarked:
-                newBmPost = BookmarkedPost(post=Post.objects.get(id=post_id),bmList=bml)
-                newBmPost.save()
-                bml.bmList.add(newBmPost)
-            
-        
-        cform = CommentForm(request.POST, request.FILES)
-        if cform.is_valid():
-            comment = cform.save(commit=False)
-            comment.post = post
-            comment.author = request.user.get_full_name()
-            comment.save()
-            return HttpResponseRedirect('/%s/post/' % post_id)
-    else:
-        form = BookmarkForm()
-        cform = CommentForm()
-    context = {'post':post, 'form': form, 'cform': cform}
-    return render_to_response('detail.html', context, context_instance=RequestContext(request))
+  
+        if 'bookmark_form' in request.POST:
+            form = BookmarkForm(request.POST)
+            if form.is_valid():
+                bml = BookmarkedPostList.objects.get(user=request.user)
+                bmp = BookmarkedPost.objects.filter(bmList=bml,post=Post.objects.get(id=post_id))
+                isBookmarked = form.cleaned_data['bookmark']        
+                if isBookmarked and not bmp.exists():
+                    newBmPost = BookmarkedPost(post=Post.objects.get(id=post_id),bmList=bml)
+                    newBmPost.save()
+                    bml.bmList.add(newBmPost)
+                elif not isBookmarked and bmp.exists():
+                    bmp = BookmarkedPost.objects.get(bmList=bml,post=Post.objects.get(id=post_id))
+                    bml.bmList.remove(bmp)
+                    bmp.delete()
+        elif 'comment_form' in request.POST:
+            cform = CommentForm(request.POST, request.FILES)
+            if cform.is_valid():
+                comment = cform.save(commit=False)
+                comment.post = post
+                comment.author = request.user.get_full_name()
+                comment.save()
+
+    cform = CommentForm()
+    bml = BookmarkedPostList.objects.get(user=request.user)
+    bmp = BookmarkedPost.objects.filter(bmList=bml,post=Post.objects.get(id=post_id))
+    form = BookmarkForm({'bookmark': bmp.exists()})
+
+    return render(request, 'detail.html', {'post':post, 'form': form, 'cform': cform})
 
 def edit(request, post_id):
     cur_post = get_object_or_404(Post, pk=post_id)

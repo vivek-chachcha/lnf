@@ -18,7 +18,7 @@
     <form enctype="multipart/form-data" action="" method="post">
     {% csrf_token %}
         {{ form }}
-    <input type="submit" value="OK">
+    <input type="submit" name='bookmark_form' value="OK">
     </form>
     <!-- TODO: add if statement to check if this is users post -->
     <form action="/{{ post.id }}/edit">
@@ -72,7 +72,7 @@
     <table>
         {{ cform.as_table }}
     </table>
-    <input type="submit" name="submit" value="Submit" />
+    <input type="submit" name="comment_form" value="Submit" />
 </form>
 {% else %}
 <h2>Please login to add comments.</h2>
