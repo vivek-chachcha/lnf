@@ -11,8 +11,9 @@ import urllib.request
 from urllib.request import urlopen
 
 class Post(models.Model):
-    lat = models.FloatField(null=True)
-    lon = models.FloatField(null=True)
+    lat = models.FloatField(null=True, default=None)
+    lon = models.FloatField(null=True, default=None)
+    address = models.CharField(max_length=50, null=True, default=None)
     
     name = models.CharField(max_length=30, null=True)
     breed = models.CharField(max_length=30, null=True)
@@ -42,22 +43,20 @@ class Post(models.Model):
     )
     state = models.CharField(max_length=1, choices=PET_STATE_CHOICES, default='0')
 
-    def save(self, address_input, *args, **kwargs):
-        self.date_created = timezone.now()
+    def save(self, *args, **kwargs):
+        if self.date_created == None:
+            self.date_created = timezone.now()
         self.modified_date = timezone.now()
 
-        if address_input != '':
-            address = urllib.parse.quote_plus(address_input)
+        if self.address != None:
+            address = urllib.parse.quote_plus(self.address)
             maps_api_url = "https://maps.google.com/maps/api/geocode/json?address=%s&key=%s" % (address,"AIzaSyAHjZ8463T8-5IvzglxU4TtWx3tMxsnxnc")
             response = urllib.request.urlopen(maps_api_url)
             data = json.loads(response.read().decode('utf8'))
             self.lat = float(data['results'][0]['geometry']['location']['lat'])
             self.lon = float(data['results'][0]['geometry']['location']['lng'])
-        else:
-            self.lat = None
-            self.lon = None
         
-        super(Post,self).save(self, *args, **kwargs)
+        super(Post,self).save(*args, **kwargs)
 
 
     def image_url(self):
