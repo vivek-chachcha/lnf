@@ -19,7 +19,7 @@ My Posts
 		{% if my_post_list %}
 			{% for post in my_post_list %}
 			<div class="row">				
-				<div class="entry" style="float: left; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
+				<div class="entry" style="float: left; padding-bottom: 25px; padding-top: 20px; padding-left: 20px; padding-right: 30px" ><img src="{{ post.image_url }}" style="max-width:100px"></div>
 				<div class="entry"><b>Name:</b> {{ post.name }}</div>
 				<div class="entry"><b>Date {{ post.get_state_display }}: </b> {{ post.date }} </div>
 				<div class="entry"><b>Color:</b> {{ post.colour }}</div>
