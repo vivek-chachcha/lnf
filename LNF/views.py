@@ -144,9 +144,12 @@ def post(request, post_id):
                 comment.save()
 
     cform = CommentForm()
-    bml = BookmarkedPostList.objects.get(user=request.user)
-    bmp = BookmarkedPost.objects.filter(bmList=bml,post=Post.objects.get(id=post_id))
-    form = BookmarkForm({'bookmark': bmp.exists()})
+    if request.user.is_authenticated():
+        bml = BookmarkedPostList.objects.get(user=request.user)
+        bmp = BookmarkedPost.objects.filter(bmList=bml,post=Post.objects.get(id=post_id))
+        form = BookmarkForm({'bookmark': bmp.exists()})
+    else:
+        form = BookmarkForm()
 
     return render(request, 'detail.html', {'post':post, 'form': form, 'cform': cform})
 

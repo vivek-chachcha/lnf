@@ -15,15 +15,18 @@
     
     <div class="share"><b>Share Post:</b> {% post_to_facebook "{{post.id}}/post" "_________" %}</div>
 
+    {% if user.is_authenticated %}
     <form enctype="multipart/form-data" action="" method="post">
     {% csrf_token %}
         {{ form }}
     <input type="submit" name='bookmark_form' value="OK">
     </form>
-    <!-- TODO: add if statement to check if this is users post -->
+    {% endif %}
+    {% if user.username == post.author %}
     <form action="/{{ post.id }}/edit">
         <input type="submit" value="Edit Post">
     </form>
+    {% endif %}
 </div>
 <div style="font-size: 19px">
     <p><b>Name:</b> {{ post.name}} </p>
