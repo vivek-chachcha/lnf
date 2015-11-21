@@ -106,8 +106,9 @@ def createpost(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            new_post = form.save()
+            new_post = form.save(commit=False)
             new_post.author = request.user.username
+            new_post.save()
             return HttpResponseRedirect('/%d/post/' % new_post.id)
     else:
         form = PostForm()
@@ -252,10 +253,8 @@ def displayBookmarkedPosts(request):
     return render(request, 'posts/bmpostslist.html', context)
 
 def viewMyPost(request):
-    all_post_list = Post.objects.order_by('-date_created')[:]
-    my_post_list = all_post_list.filter(author = request.user.username)
-    context = {'my_post_list' : my_post_list}
-    return render(request, 'posts/mypost.html', context)
+    my_post_list = Post.objects.filter(author=request.user.username).order_by('-date_created')[:]
+    return render(request, 'posts/mypost.html', {'my_post_list' : my_post_list})
     
 def home(request):
     return render(request, 'home.html')
