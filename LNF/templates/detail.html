@@ -11,7 +11,13 @@
 
 <div style="float: right; text-align: right;">
     <b>Date posted:</b> {{ post.date_created }}<br><br>
-    <img src="{{post.image_url}}" height="200" width="200"><br><br>
+    {% if user.username == post.author %}
+    <form action="/{{ post.id }}/edit">
+        <input type="submit" value="Edit Post">
+    </form>
+    {% endif %}
+    <br>
+    <img src="{{post.image_url}}" class="imgResize"><br><br>
     
     <div class="share"><b>Share Post:</b> {% post_to_facebook "{{post.id}}/post" "_________" %}</div>
 
@@ -22,11 +28,7 @@
     <input type="submit" name='bookmark_form' value="OK">
     </form>
     {% endif %}
-    {% if user.username == post.author %}
-    <form action="/{{ post.id }}/edit">
-        <input type="submit" value="Edit Post">
-    </form>
-    {% endif %}
+    
 </div>
 <div style="font-size: 19px">
     <p><b>Name:</b> {{ post.name}} </p>
@@ -40,36 +42,44 @@
     <br/>
     <hr/>
     <br/>
+    
+    <b><font size="5">Comments:</font></b>
+    
+    <br/><br/>
 
-<div style="background-color:#9999CC; color:#800000; padding:25px; border-top-left-radius: 25px; border-top-right-radius: 25px;">
-<h3>COMMENT SECTION</h3>
-</div>
-<div style="background-color:#E6E6FA; color:#800000; padding:20px; border-bottom-right-radius: 25px;border-bottom-left-radius: 25px ">
+<div>
 
 {% for comment in post.comments.all %}
     <div class="comment">
-        <p><i><div class="date"; style="color:#996666;">comment written by {{ comment.author }}</div></i></p>
-		{% if comment.image_url%}
-		<p><b>Photo: </b> <img src="{{comment.image_url}}" height="200" width="200"></p>
+        
+        <table>
+        <col width="250">
+        <tr>
+        <td valign="top">
+        {% if comment.image_url%}
+		<p><b>Photo: </b> <br><img src="{{comment.image_url}}" class="imgResize"></p>
 		{% else %}
 	    <p><b>Photo: </b> N/A </p>
 		{% endif %}
-		{% if comment.last_known_location %}
-		<p><b>Last known location: </b>{{ comment.last_known_location}}</p>
+        {% if comment.last_known_location %}
+		<p><b>Last Known Location: </b>{{ comment.last_known_location}}</p>
 		{% else %}
-		<p><b>Last known location: </b> N/A </p>	
+		<p><b>Last Known Location: </b> N/A </p>	
 		{% endif %}		
+        </td>
+        <td valign="top">
+        <font size="3" color="#968d79"><b>{{ comment.author }}</b> &nbsp;&nbsp;&nbsp;&nbsp; <i>on {{ comment.date_created }}</i></font><br><br>
         <b>Comment: </b><p>{{ comment.text|linebreaks }}</p>
-		<p><i><div class="date"; style="color:#996666;">created on {{ comment.date_created }}</div></i></p>
-		<p>_____________________________________________________________</p>
+		</td></tr></table>
+        <hr>
     </div>
 {% empty %}
     <p>This post has no comments yet...</p>
 {% endfor %}
 
 {% if user.is_authenticated %}
-<h2>Add Comment</h2>
-
+<h2>Leave a Comment</h2>
+<i>* Photo and last known locations are not mandatory</i><br><br>
 <form enctype="multipart/form-data" action="" method="post">
     {% csrf_token %}
     <table>
@@ -78,12 +88,24 @@
     <input type="submit" name="comment_form" value="Submit" />
 </form>
 {% else %}
-<h2>Please login to add comments.</h2>
+<h2>Please Login to Leave Comments</h2>
 {% endif %}
 </div>
 
 <style>
-        .share {
+    .comment hr {
+        border-color: #808080;
+        border-style: solid;
+        border-width: 1px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    .imgResize {
+        max-width: 200px;
+    }
+    .share {
         display: inline-block;
     }
     .facebook-this {
