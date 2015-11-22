@@ -34,4 +34,6 @@ urlpatterns = [
     url(r'^about/$', views.about, name='about'),
     url(r'^admin/import', views.importData, name='importdata'),
     url(r'^admin/startimport', views.importDataStart, name='importdatastart'),
+    url(r'^(?P<post_id>[0-9]+)/edit/$', views.edit, name='edit'),
+    url(r'^mypost/$', views.viewMyPost, name='mypost'),
 ]

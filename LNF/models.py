@@ -9,11 +9,14 @@ import json
 import urllib.parse
 import urllib.request
 from urllib.request import urlopen
+from django.core.exceptions import ValidationError
 
 class Post(models.Model):
-    lat = models.FloatField(null=True)
-    lon = models.FloatField(null=True)
-    
+    lat = models.FloatField(null=True, default=None)
+    lon = models.FloatField(null=True, default=None)
+    address = models.CharField(max_length=50, null=True, default=None)
+
+    author = models.CharField(max_length=200, null=True)	
     name = models.CharField(max_length=30, null=True)
     breed = models.CharField(max_length=30, null=True)
     colour = models.CharField(max_length=30, null=True)
@@ -42,22 +45,20 @@ class Post(models.Model):
     )
     state = models.CharField(max_length=1, choices=PET_STATE_CHOICES, default='0')
 
-    def save(self, address_input, *args, **kwargs):
-        self.date_created = timezone.now()
+    def save(self, *args, **kwargs):
+        if self.date_created == None:
+            self.date_created = timezone.now()
         self.modified_date = timezone.now()
 
-        if address_input != '':
-            address = urllib.parse.quote_plus(address_input)
+        if self.address != None:
+            address = urllib.parse.quote_plus(self.address)
             maps_api_url = "https://maps.google.com/maps/api/geocode/json?address=%s&key=%s" % (address,"AIzaSyAHjZ8463T8-5IvzglxU4TtWx3tMxsnxnc")
             response = urllib.request.urlopen(maps_api_url)
             data = json.loads(response.read().decode('utf8'))
             self.lat = float(data['results'][0]['geometry']['location']['lat'])
             self.lon = float(data['results'][0]['geometry']['location']['lng'])
-        else:
-            self.lat = None
-            self.lon = None
         
-        super(Post,self).save(self, *args, **kwargs)
+        super(Post,self).save(*args, **kwargs)
 
 
     def image_url(self):
@@ -82,9 +83,26 @@ class BookmarkedPost(models.Model):
     def save(self, *args, **kwargs):
         self.date_bmed = timezone.now()
         super(BookmarkedPost,self).save(self, *args, **kwargs)
-       
-
+      
 class BookmarkedPostList(models.Model):
     user = models.OneToOneField(User, editable=False)
     bmList = models.ManyToManyField(BookmarkedPost, blank=True)
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, related_name='comments')
+    author = models.CharField(max_length=200, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_known_location = models.CharField(max_length=200, null=True, blank=True)
+    photo = models.ImageField(upload_to='comments', null=True, blank=True)
+    text = models.TextField()
+
+    def __str__(self):              
+        return self.text
+
+    def save(self, *args, **kwargs):
+        super(Comment,self).save(self, *args, **kwargs)
+		
+    def image_url(self):
+        if self.photo and hasattr(self.photo, 'url'):
+            return self.photo.url
 

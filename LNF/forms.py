@@ -7,7 +7,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.files import File
 from django.conf import settings
-from .models import Post
+from .models import Post, Comment
 from django.core.exceptions import ValidationError
 import json
 import urllib.parse
@@ -56,7 +56,7 @@ class PostForm(forms.ModelForm):
     address = forms.CharField(label=(u'Address'), required=False, validators=[valid_address], widget=TextInput(attrs={'size': 25}))    
     class Meta:
         model = Post
-        fields = ('name', 'state', 'date', 'colour', 'breed', 'sex', 'description', 'picture')
+        fields = ('name', 'state', 'date', 'colour', 'breed', 'sex', 'description', 'picture', 'address')
         labels = {
             'date': 'Date (mm/dd/yy)'
                  }
@@ -66,5 +66,12 @@ class PostForm(forms.ModelForm):
             'colour': TextInput(attrs={'size': 25}), 
             'breed': TextInput(attrs={'size': 25}),
             'description': Textarea(attrs={'cols': 27, 'rows': 10}),
+	    'address': TextInput(attrs={'size': 50}),
         }
+		
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = ['post', 'author']
+        fields = ('last_known_location', 'photo', 'text')
         

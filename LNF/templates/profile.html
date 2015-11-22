@@ -8,10 +8,12 @@
 
 {% block content %}
 
-    <p><font size="5"; color=#2A1500><b>Here is your account information:</b></font></p>
-    <div style="border-radius: 30px 30px 30px 30px; background-color:fbf5d5; color:#303030; padding:20px;">
+    <p><font size="5"><b>Here is your account information:</b></font></p>
     <p><b>Name:</b> {{ lnf_user.get_full_name }}</p>
-    <p><b>Bookmarked Posts: </b><a href="/bmposts/">List</a></p>
-    <p><b>My Post:</b> {{ lnf_user.myPost }}</p>
-    </div>
+    <p><b>Username:</b> {{ lnf_user.username }}</p>
+    <p><b>Email:</b> {{ lnf_user.email }}</p>
+    <br>
+    <font size="4"><b>Activity: </b></font><br>
+    <ul><li><p><a href="/bmposts/">Bookmarked Posts</a></p></li>
+    <li><p><a href="/mypost/">My Posts</a> </p></li></ul>
 {% endblock %}

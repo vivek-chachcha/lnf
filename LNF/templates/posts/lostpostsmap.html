@@ -112,13 +112,13 @@ Lost Posts
 			{% for post in lost_post_list %}
 				{% ifnotequal post.lat None %}
 					<div class="row" onclick="focusOnMap({{post.id}})">
-						<div class="entry" style="float: right; padding-bottom: 25px; padding-top: 25px; padding-left: 25px; padding-right: 30px" ><img src="{{ post.image_url }}" height="100px" width="100px"></div>
+						<div class="entry" style="float: right; padding-bottom: 25px; padding-top: 20px; padding-left: 20px; padding-right: 30px" ><img src="{{ post.image_url }}" style="max-width:100px"></div>
 						<div class="entry"><b>Name:</b> {{ post.name }}</div>
 				        <div class="entry"><b>Date {{ post.get_state_display }}: </b> {{ post.date }} </div>
 						<div class="entry"><b>Color:</b> {{ post.colour }}</div>
 						<div class="entry"><b>Breed:</b> {{ post.breed }}</div>
 						<div class="entry"><b>Sex:</b>  {{ post.get_sex_display }}</div><br>
-						<div class="entry"><a href="/{{ post.id }}/post">More Details</a></div>
+						<div class="entry"><a href="/{{ post.id }}/post">More Details</a></div><br>
 						<div class="entry" style="text-align: right"><i><b>Last Updated: </b> {{ post.modified_date }}</i></div>
 					</div><br>
 				{% endifnotequal %}

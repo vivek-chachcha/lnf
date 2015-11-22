@@ -1,26 +1,23 @@
 {% extends 'basesite.html' %}
-
 {% load staticfiles %}
-
-{% block title %}Bookmarked Posts{% endblock %}
+{% block title %}My Posts{% endblock %}
 
 {% block header %}
-Bookmarked Posts
+My Posts
 {% endblock %}
 
 {% block content %}
-
 <link rel="stylesheet" type="text/css" href="{%static 'posts/poststyle.css' %}" />
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Bookmarked Posts</title>
+		<title>My Posts</title>
     </head>
 <body>
 	<div id="posttablelist" style="display:block">
 		<div id="list">
-		{% if bm_post_list %}
-			{% for post in bm_post_list %}
+		{% if my_post_list %}
+			{% for post in my_post_list %}
 			<div class="row">				
 				<div class="entry" style="float: left; padding-bottom: 25px; padding-top: 20px; padding-left: 20px; padding-right: 30px" ><img src="{{ post.image_url }}" style="max-width:100px"></div>
 				<div class="entry"><b>Name:</b> {{ post.name }}</div>
@@ -39,5 +36,4 @@ Bookmarked Posts
 	</div>
   </body>
 </html>
-
- {% endblock %}
+{% endblock %}

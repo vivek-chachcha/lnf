@@ -5,8 +5,8 @@ from LNF.forms import UserCreateForm, LoginForm,BookmarkForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from .models import Post, BookmarkedPostList, BookmarkedPost
-from .forms import PostForm
+from .models import Post, Comment, BookmarkedPostList, BookmarkedPost
+from .forms import PostForm, CommentForm
 from PIL import Image
 import json
 import urllib.parse
@@ -24,7 +24,12 @@ def importDataStart(request):
     url = "ftp://webftp.vancouver.ca/OpenData/json/LostAnimals.json"
     data = urlopen(url).read().decode('utf-8')
     data = json.loads(data)
+    
+    parseData(data)
+    
+    return HttpResponseRedirect('/admin/')
 
+def parseData(data):
     for entry in data:
         date_entry = entry['Date']
         dateparsed = datetime.strptime(date_entry, "%Y-%m-%d").date()
@@ -36,10 +41,8 @@ def importDataStart(request):
                 m = Post(date = date_entry, colour = color_entry, breed = breed_entry, name = name_entry, date_created = entry['DateCreated'])
                 m.sex = entry['Sex'] if entry['Sex'] else 'X'
                 m.state = 0 if entry['State'] == 'Lost' else 1
-                m.save('')                
+                m.save('')   
     
-    return HttpResponseRedirect('/admin/')
-
 def signUpUser(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/profile/') #the user has already signed up, return to profile
@@ -104,7 +107,8 @@ def createpost(request):
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             new_post = form.save(commit=False)
-            new_post.save(request.POST.get('address'))
+            new_post.author = request.user.username
+            new_post.save()
             return HttpResponseRedirect('/%d/post/' % new_post.id)
     else:
         form = PostForm()
@@ -117,27 +121,53 @@ def post(request, post_id):
     
         if not request.user.is_authenticated():
             return HttpResponseRedirect('/login/')
-            
-        form = BookmarkForm(request.POST)
-        if form.is_valid():
-            bml = BookmarkedPostList.objects.get(user=request.user)
-            bmp = BookmarkedPost.objects.filter(bmList=bml,post=Post.objects.get(id=post_id))
-            if bmp.exists():
-                bmp = BookmarkedPost.objects.get(bmList=bml,post=Post.objects.get(id=post_id))
-                bml.bmList.remove(bmp)
-                bmp.delete()
-            isBookmarked = form.cleaned_data['bookmark']        
-            if isBookmarked:
-                newBmPost = BookmarkedPost(post=Post.objects.get(id=post_id),bmList=bml)
-                newBmPost.save()
-                bml.bmList.add(newBmPost)
-            
-            return HttpResponseRedirect('/%s/post/' % post_id)
+  
+        if 'bookmark_form' in request.POST:
+            form = BookmarkForm(request.POST)
+            if form.is_valid():
+                bml = BookmarkedPostList.objects.get(user=request.user)
+                bmp = BookmarkedPost.objects.filter(bmList=bml,post=Post.objects.get(id=post_id))
+                isBookmarked = form.cleaned_data['bookmark']        
+                if isBookmarked and not bmp.exists():
+                    newBmPost = BookmarkedPost(post=Post.objects.get(id=post_id),bmList=bml)
+                    newBmPost.save()
+                    bml.bmList.add(newBmPost)
+                elif not isBookmarked and bmp.exists():
+                    bmp = BookmarkedPost.objects.get(bmList=bml,post=Post.objects.get(id=post_id))
+                    bml.bmList.remove(bmp)
+                    bmp.delete()
+        elif 'comment_form' in request.POST:
+            cform = CommentForm(request.POST, request.FILES)
+            if cform.is_valid():
+                comment = cform.save(commit=False)
+                comment.post = post
+                comment.author = request.user.get_full_name()
+                comment.save()
+
+    cform = CommentForm()
+    if request.user.is_authenticated():
+        bml = BookmarkedPostList.objects.get(user=request.user)
+        bmp = BookmarkedPost.objects.filter(bmList=bml,post=Post.objects.get(id=post_id))
+        form = BookmarkForm({'bookmark': bmp.exists()})
     else:
         form = BookmarkForm()
 
-    return render(request, 'detail.html', {'post': post, 'form':form})
-    
+    return render(request, 'detail.html', {'post':post, 'form': form, 'cform': cform})
+
+def edit(request, post_id):
+    cur_post = get_object_or_404(Post, pk=post_id)
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/login/')
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=cur_post)
+        if form.is_valid():
+            cur_post = form.save()
+            return HttpResponseRedirect('/%d/post/' % cur_post.id)
+    else:
+        form = PostForm(instance=cur_post)
+							
+    return render(request, 'editPost.html', {'form': form})
+
 def error(request):
     return render(request, 'error.html')
 
@@ -221,6 +251,10 @@ def displayBookmarkedPosts(request):
     bm_post_list = [bookmarkedpost.post for bookmarkedpost in bm_post_list]
     context = {'bm_post_list': bm_post_list}
     return render(request, 'posts/bmpostslist.html', context)
+
+def viewMyPost(request):
+    my_post_list = Post.objects.filter(author=request.user.username).order_by('-date_created')[:]
+    return render(request, 'posts/mypost.html', {'my_post_list' : my_post_list})
     
 def home(request):
     return render(request, 'home.html')
