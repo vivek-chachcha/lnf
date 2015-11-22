@@ -1,5 +1,5 @@
 {% extends 'basesite.html' %}
-
+{% load static %}
 {% block title %}Home Page{% endblock %}
 
 {% block header %}
@@ -8,5 +8,7 @@ Animal Lost 'N Found
 
 {% block content %}
 <center>Welcome to Animal Lost 'N Found! <br><br>
-Click on any of the links on the navigation bar to begin.</center>
+
+<img src="{% static 'front-page.jpg' %}" height="325" width="500">
+<br><br>Click on any of the links on the navigation bar to begin.</center>
 {% endblock %}
