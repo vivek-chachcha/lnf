@@ -1,17 +1,13 @@
-from django.test import TestCase
-from django.test import LiveServerTestCase
-from django.contrib.auth.models import User
 from django.test import TestCase, RequestFactory, LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.http import urlquote
 from selenium import webdriver
 from selenium.common import exceptions
 from selenium.webdriver.common.keys import Keys
 from . models import Post
 from . views import importDataStart, parseData
-from selenium import webdriver
-from django.utils.http import urlquote
 
 class ParsingTests(TestCase):
     def setUp(self):
@@ -1532,7 +1528,7 @@ class AdminViewTestCase(StaticLiveServerTestCase):
         self.selenium.implicitly_wait(1)
         self.assertIn("Start Import", self.selenium.page_source)
 
-class CreatePostTestCase(LiveServerTestCase):
+class CreatePostTestCase(StaticLiveServerTestCase):
     reset_sequences = True
     def setUp(self):
         self.selenium = webdriver.Firefox()
@@ -1569,6 +1565,7 @@ class CreatePostTestCase(LiveServerTestCase):
 
     def tearDown(self):
         # Call tearDown to close the web browser
+        self.selenium.refresh()
         self.selenium.quit()
         super(CreatePostTestCase, self).tearDown()
 
@@ -1728,7 +1725,7 @@ class CreatePostTestCase(LiveServerTestCase):
         self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
         self.assertIn("Details Page", self.selenium.title)
        
-class BookmarkPostTestCase(LiveServerTestCase):
+class BookmarkPostTestCase(StaticLiveServerTestCase):
     def setUp(self):
         self.selenium = webdriver.Firefox()
         self.selenium.maximize_window()
@@ -1763,7 +1760,8 @@ class BookmarkPostTestCase(LiveServerTestCase):
         self.selenium.find_element_by_xpath('//input[@type="submit"]').click()        
 
     def tearDown(self):
-        # Call tearDown to close the web browser
+        # Call tearDown to close the web browser        
+        self.selenium.refresh()
         self.selenium.quit()
         super(BookmarkPostTestCase, self).tearDown()
 
@@ -1866,7 +1864,7 @@ class BookmarkPostTestCase(LiveServerTestCase):
         self.assertNotIn("Doug", self.selenium.page_source)
         self.assertNotIn("Kat", self.selenium.page_source)
         
-class SharePostTestCase(LiveServerTestCase):
+class SharePostTestCase(StaticLiveServerTestCase):
     reset_sequences = True
     def setUp(self):
         self.selenium = webdriver.Firefox()
@@ -1903,6 +1901,7 @@ class SharePostTestCase(LiveServerTestCase):
 
     def tearDown(self):
         # Call tearDown to close the web browser
+        self.selenium.refresh()
         self.selenium.quit()
         super(SharePostTestCase, self).tearDown()
 
