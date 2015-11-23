@@ -74,4 +74,8 @@ class CommentForm(forms.ModelForm):
         model = Comment
         exclude = ['post', 'author']
         fields = ('last_known_location', 'photo', 'text')
+        widgets = {
+            'last_known_location': TextInput(attrs={'size': 25}),
+            'text': TextInput(attrs={'size': 200}),
+        }
         

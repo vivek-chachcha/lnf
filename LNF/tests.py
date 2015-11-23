@@ -6,7 +6,7 @@ from django.utils.http import urlquote
 from selenium import webdriver
 from selenium.common import exceptions
 from selenium.webdriver.common.keys import Keys
-from . models import Post
+from . models import Post, Comment
 from . views import importDataStart, parseData
 
 class ParsingTests(TestCase):
@@ -1949,3 +1949,407 @@ class SharePostTestCase(StaticLiveServerTestCase):
         # share link leads to Facebook
         self.assertIn("Facebook", self.selenium.page_source)
         self.selenium.switch_to_window(self.selenium.window_handles[0])
+		
+class SignUpTestCase(StaticLiveServerTestCase):
+    def setUp(self):
+	    # instantiate the webdriver
+        self.selenium = webdriver.Firefox()
+        self.selenium.maximize_window()
+        User.objects.create_user(first_name = "Oreo", last_name = "Cookies", username = "exist", email = "test1@gmail.com", password = "pass1")
+        super(SignUpTestCase, self).setUp()
+
+    def tearDown(self):
+        # close the web browser
+        self.selenium.quit()
+        super(SignUpTestCase, self).tearDown()
+	
+    def test_signup(self):
+        # test symbols in first name
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/signup/")
+        )
+        firstname = self.selenium.find_element_by_id("id_firstname")
+        firstname.send_keys("Or3o")
+        lastname = self.selenium.find_element_by_id("id_lastname")
+        lastname.send_keys("Cookies")
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test1")
+        email = self.selenium.find_element_by_id("id_email")
+        email.send_keys("test1@gmail.com")
+        password1 = self.selenium.find_element_by_id("id_password1")
+        password1.send_keys("pass1")
+        password2 = self.selenium.find_element_by_id("id_password2")
+        password2.send_keys("pass1")
+        user_agreement = self.selenium.find_element_by_id("id_user_agreement")
+        user_agreement.click()
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+		
+        # test symbols in last name
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/signup/")
+        )
+        firstname = self.selenium.find_element_by_id("id_firstname")
+        firstname.send_keys("Oreo")
+        lastname = self.selenium.find_element_by_id("id_lastname")
+        lastname.send_keys("C@@ki35")
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test2")
+        email = self.selenium.find_element_by_id("id_email")
+        email.send_keys("test2@gmail.com")
+        password1 = self.selenium.find_element_by_id("id_password1")
+        password1.send_keys("pass2")
+        password2 = self.selenium.find_element_by_id("id_password2")
+        password2.send_keys("pass2")
+        user_agreement = self.selenium.find_element_by_id("id_user_agreement")
+        user_agreement.click()
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+
+        # test symbols in last name
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/signup/")
+        )
+        firstname = self.selenium.find_element_by_id("id_firstname")
+        firstname.send_keys("Oreo")
+        lastname = self.selenium.find_element_by_id("id_lastname")
+        lastname.send_keys("C@@ki35")
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test2")
+        email = self.selenium.find_element_by_id("id_email")
+        email.send_keys("test2@gmail.com")
+        password1 = self.selenium.find_element_by_id("id_password1")
+        password1.send_keys("pass2")
+        password2 = self.selenium.find_element_by_id("id_password2")
+        password2.send_keys("pass2")
+        user_agreement = self.selenium.find_element_by_id("id_user_agreement")
+        user_agreement.click()
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+
+        # test username already exists
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/signup/")
+        )
+        firstname = self.selenium.find_element_by_id("id_firstname")
+        firstname.send_keys("Hershey")
+        lastname = self.selenium.find_element_by_id("id_lastname")
+        lastname.send_keys("Chocolate")
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("exist")
+        email = self.selenium.find_element_by_id("id_email")
+        email.send_keys("test2@gmail.com")
+        password1 = self.selenium.find_element_by_id("id_password1")
+        password1.send_keys("pass2")
+        password2 = self.selenium.find_element_by_id("id_password2")
+        password2.send_keys("pass2")
+        user_agreement = self.selenium.find_element_by_id("id_user_agreement")
+        user_agreement.click()
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+
+        # test invalid email
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/signup/")
+        )
+        firstname = self.selenium.find_element_by_id("id_firstname")
+        firstname.send_keys("Wizard")
+        lastname = self.selenium.find_element_by_id("id_lastname")
+        lastname.send_keys("Oz")
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test1")
+        email = self.selenium.find_element_by_id("id_email")
+        email.send_keys("test1@")
+        password1 = self.selenium.find_element_by_id("id_password1")
+        password1.send_keys("pass1")
+        password2 = self.selenium.find_element_by_id("id_password2")
+        password2.send_keys("pass1")
+        user_agreement = self.selenium.find_element_by_id("id_user_agreement")
+        user_agreement.click()
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+		
+        # test passwords not matching
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/signup/")
+        )
+        firstname = self.selenium.find_element_by_id("id_firstname")
+        firstname.send_keys("Wizard")
+        lastname = self.selenium.find_element_by_id("id_lastname")
+        lastname.send_keys("Oz")
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test1")
+        email = self.selenium.find_element_by_id("id_email")
+        email.send_keys("test1@")
+        password1 = self.selenium.find_element_by_id("id_password1")
+        password1.send_keys("pass1")
+        password2 = self.selenium.find_element_by_id("id_password2")
+        password2.send_keys("pass2")
+        user_agreement = self.selenium.find_element_by_id("id_user_agreement")
+        user_agreement.click()
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+
+        # test not checking user agreement
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/signup/")
+        )
+        firstname = self.selenium.find_element_by_id("id_firstname")
+        firstname.send_keys("Wizard")
+        lastname = self.selenium.find_element_by_id("id_lastname")
+        lastname.send_keys("Oz")
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test1")
+        email = self.selenium.find_element_by_id("id_email")
+        email.send_keys("test1@gmail.com")
+        password1 = self.selenium.find_element_by_id("id_password1")
+        password1.send_keys("pass1")
+        password2 = self.selenium.find_element_by_id("id_password2")
+        password2.send_keys("pass1")
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+		
+        # test not filling all mandatory fields
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/signup/")
+        )
+        firstname = self.selenium.find_element_by_id("id_firstname")
+        firstname.send_keys("")
+        lastname = self.selenium.find_element_by_id("id_lastname")
+        lastname.send_keys("")
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("")
+        email = self.selenium.find_element_by_id("id_email")
+        email.send_keys("")
+        password1 = self.selenium.find_element_by_id("id_password1")
+        password1.send_keys("")
+        password2 = self.selenium.find_element_by_id("id_password2")
+        password2.send_keys("")
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+		
+        # test correct signup
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/signup/")
+        )
+        firstname = self.selenium.find_element_by_id("id_firstname")
+        firstname.send_keys("Oreo")
+        lastname = self.selenium.find_element_by_id("id_lastname")
+        lastname.send_keys("Cookies")
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("user")
+        email = self.selenium.find_element_by_id("id_email")
+        email.send_keys("user@gmail.com")
+        password1 = self.selenium.find_element_by_id("id_password1")
+        password1.send_keys("pass1")
+        password2 = self.selenium.find_element_by_id("id_password2")
+        password2.send_keys("pass1")
+        user_agreement = self.selenium.find_element_by_id("id_user_agreement")
+        user_agreement.click()
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+        self.selenium.implicitly_wait(1)
+        self.assertIn("Login", self.selenium.title)
+		
+class LoginTestCase(StaticLiveServerTestCase):
+    def setUp(self):
+	    # instantiate the webdriver
+        self.selenium = webdriver.Firefox()
+        self.selenium.maximize_window()
+        # create a new user
+        User.objects.create_user(first_name = "Oreo", last_name = "Cookies", username = "test1", email = "test1@gmail.com", password = "pass1")
+        super(LoginTestCase, self).setUp()
+
+    def tearDown(self):
+        # close the web browser
+        self.selenium.quit()
+        super(LoginTestCase, self).tearDown()
+	
+    def test_login(self):
+        # test username does not exist
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/login/")
+        )
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("notexist")
+        password = self.selenium.find_element_by_id("id_password")
+        password.send_keys("pass1")
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+		
+        # test wrong password
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/login/")
+        )
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test1")
+        password = self.selenium.find_element_by_id("id_password")
+        password.send_keys("wrong")
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+		
+        # test correct login
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/login/")
+        )
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test1")
+        password = self.selenium.find_element_by_id("id_password")
+        password.send_keys("pass1")
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+        self.assertIn("Home Page", self.selenium.title)
+		
+class LogoutTestCase(StaticLiveServerTestCase):
+    def setUp(self):
+	    # instantiate the webdriver
+        self.selenium = webdriver.Firefox()
+        self.selenium.maximize_window()
+        # create a new user
+        User.objects.create_user(first_name = "Oreo", last_name = "Cookies", username = "test1", email = "test1@gmail.com", password = "pass1")
+        super(LogoutTestCase, self).setUp()
+
+    def tearDown(self):
+        # close the web browser
+        self.selenium.quit()
+        super(LogoutTestCase, self).tearDown()
+		
+    def test_logout(self):
+        
+		# login
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/login/")
+        )
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test1")
+        password = self.selenium.find_element_by_id("id_password")
+        password.send_keys("pass1") 
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+
+		#test logout
+        self.selenium.find_element_by_link_text('Logout').click()
+        self.assertIn("Login", self.selenium.title)
+
+class MyPostTestCase(StaticLiveServerTestCase):
+    def setUp(self):
+	    # instantiate the webdriver
+        self.selenium = webdriver.Firefox()
+        self.selenium.maximize_window()
+        
+		# create new users
+        User.objects.create_user(first_name = "Oreo", last_name = "Cookies", username = "test1", email = "test1@gmail.com", password = "pass1")
+        User.objects.create_user(first_name = "Hershey", last_name = "Chocolate", username = "test2", email = "test2@gmail.com", password = "pass2")      
+        
+        # create posts		
+        Post.objects.create(lat = None, lon = None, address = None, author = "test1", name = "Toad", breed = "Fish", colour = "Yellow", description = "", date_created = timezone.now(), date = "2014-12-10", modified_date = timezone.now(), sex = "M", picture = "", state = "0")
+        Post.objects.create(lat = None, lon = None, address = None, author = "test1", name = "Cappa", breed = "Dog", colour = "Purple", description = "", date_created = timezone.now(), date = "2015-01-16", modified_date = timezone.now(), sex = "F", picture = "", state = "1")
+        Post.objects.create(lat = None, lon = None, address = None, author = "test2", name = "Planet", breed = "Dog", colour = "Purple", description = "", date_created = timezone.now(), date = "2015-01-16", modified_date = timezone.now(), sex = "F", picture = "", state = "0")		
+        super(MyPostTestCase, self).setUp()
+		
+    def tearDown(self):
+        # close the web browser
+        self.selenium.quit()
+        super(MyPostTestCase, self).tearDown()
+
+    def test_mypost(self):
+        
+	    # test test1 my posts
+		# login
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/login/")
+        )
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test1")
+        password = self.selenium.find_element_by_id("id_password")
+        password.send_keys("pass1") 
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+
+        # go to profile and click my posts
+        self.selenium.find_element_by_link_text('Profile').click()
+        self.selenium.find_element_by_link_text('My Posts').click()
+        self.assertIn("My Posts", self.selenium.title)
+        
+        # assert posts created by test1 are there
+        self.assertIn("Toad", self.selenium.page_source)
+        self.assertIn("Cappa", self.selenium.page_source)
+        self.assertNotIn("Planet", self.selenium.page_source)
+		
+        # logout
+        self.selenium.find_element_by_link_text('Logout').click()
+		
+	    # test test2 my posts
+		# login
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/login/")
+        )
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test2")
+        password = self.selenium.find_element_by_id("id_password")
+        password.send_keys("pass2") 
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+
+        # go to profile and click my posts
+        self.selenium.find_element_by_link_text('Profile').click()
+        self.selenium.find_element_by_link_text('My Posts').click()
+        self.assertIn("My Posts", self.selenium.title)
+        
+        # assert posts created by test1 are there
+        self.assertIn("Planet", self.selenium.page_source)
+        self.assertNotIn("Toad", self.selenium.page_source)
+        self.assertNotIn("Cappa", self.selenium.page_source)
+	
+class CommentTestCase(StaticLiveServerTestCase):
+    def setUp(self):
+        self.selenium = webdriver.Firefox()
+        self.selenium.maximize_window()
+        super(CommentTestCase, self).setUp()
+        
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/signup/")
+        )
+        firstname = self.selenium.find_element_by_id("id_firstname")
+        firstname.send_keys("Oreo")
+        lastname = self.selenium.find_element_by_id("id_lastname")
+        lastname.send_keys("Cookies")
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test1")
+        email = self.selenium.find_element_by_id("id_email")
+        email.send_keys("test1@gmail.com")
+        password1 = self.selenium.find_element_by_id("id_password1")
+        password1.send_keys("pass1")
+        password2 = self.selenium.find_element_by_id("id_password2")
+        password2.send_keys("pass1")
+        user_agreement = self.selenium.find_element_by_id("id_user_agreement")
+        user_agreement.click()
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+  
+        self.selenium.get(
+            '%s%s' % (self.live_server_url,  "/login/")
+        )      
+        username = self.selenium.find_element_by_id("id_username")
+        username.send_keys("test1")
+        password = self.selenium.find_element_by_id("id_password")
+        password.send_keys("pass1")
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()        
+
+    def tearDown(self):
+        # Call tearDown to close the web browser
+        self.selenium.quit()
+        super(CommentTestCase, self).tearDown()
+
+    def test_comment(self):
+        #  create a post
+        self.selenium.get(
+            '%s%s' % (self.live_server_url, "/createpost/")
+        )                
+        self.selenium.find_element_by_id("id_name").send_keys("Planet")
+        self.selenium.find_element_by_id("id_breed").send_keys("Fish")
+        self.selenium.find_element_by_id("id_colour").send_keys("Gold")
+        self.selenium.find_element_by_id("id_date").send_keys("10/10/14")
+        self.selenium.find_element_by_id("id_description").send_keys("Planet needs water.")
+        self.selenium.find_element_by_xpath('//input[@type="submit"]').click()
+        self.assertIn("Details Page", self.selenium.title)
+        url1 = self.selenium.current_url
+
+        self.assertNotIn("Leave Comments", self.selenium.page_source)
+        # test not filling in all mandatory fields
+        self.selenium.find_element_by_id("id_last_known_location").send_keys("2424 Main Mall")
+        self.selenium.find_element_by_id("id_text").send_keys("")	
+        self.selenium.find_element_by_xpath('//input[@value="Submit"]').click()
+        self.assertNotIn("Oreo Cookies", self.selenium.page_source)
+	
+        # test adding a valid comment
+        self.selenium.find_element_by_id("id_last_known_location").send_keys("2424 Main Mall")
+        self.selenium.find_element_by_id("id_text").send_keys("It has been sunny for days, I think Planet is dead now.")	
+        self.selenium.find_element_by_xpath('//input[@value="Submit"]').click()
+        self.assertIn("Oreo Cookies", self.selenium.page_source)
+        self.assertIn("2424 Main Mall", self.selenium.page_source)
+        self.assertIn("It has been sunny for days, I think Planet is dead now.", self.selenium.page_source)	
