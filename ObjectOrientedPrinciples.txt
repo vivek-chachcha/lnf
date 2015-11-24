@@ -1,0 +1,11 @@
+OO Principles
+
+1) classes in models such as post, comment only have a single responsibility, which is to represent the fields
+that relate to a post and a comment.
+2) There s loose coupling ex. bookmarkedpost does not depend on underlying implementation of post, bmpostlist
+does not depend on bookmarkedpost.
+3) templates used such as basesite allows for extensions (can be put into any other templates)
+4) every  method in post, comment are closely relevant to what the models represents, less likely for methods to
+ be irrelevant clients that use the classes.
+5) calling image_url, description_text etc. allows details to be hidden since usage does not depend on whether 
+the data is default or user-submmitted, and data is treated the same either way.
